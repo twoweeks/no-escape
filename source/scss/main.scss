@@ -1,0 +1,18 @@
+@import
+	'inc/vars',
+	'inc/every';
+
+body {
+	display: -ms-grid;
+	display: grid;
+
+	$panelWidth: 225px;
+
+	-ms-grid-columns: $panelWidth auto;
+	grid-template-columns: $panelWidth auto;
+}
+
+@import 'inc/panel';
+
+@import
+	'inc/sites/main/style';
