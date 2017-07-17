@@ -1,0 +1,1 @@
+start "server" /B "assets/server/mongoose.exe"
