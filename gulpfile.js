@@ -17,7 +17,7 @@ let minify = composer(uglifyjs, console)
 
 let paths = {
 	html: {
-		dev: ['source/pug/**/*.pug', '!source/pug/src/**/*.pug'],
+		dev: ['source/pug/**/*.pug', '!source/pug/**/inc/**/*.pug'],
 		prod: 'build/'
 	},
 	js: {

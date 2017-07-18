@@ -1,0 +1,65 @@
+doctype html
+html
+	head
+		include inc/_head.pug
+	body
+		include inc/_header.pug
+		
+		main
+			h3 Заявление на работу редактором
+			p Мы рады, что Вы хотите нам помочь! Заполните, пожалуйста, эту небольшую форму, чтобы мы могли принять Ваше заявление.
+			form(onsubmit='alert("Спасибо, Ваши данные отправлены! Они будут рассмотрены специальной комиссией в течение 60 рабочих дней, о решении вы будете уведомлены в течение 40 рабочих дней.")')
+				fieldset
+					legend Обязательные данные заявителя (по форме Н статьи 246 КП УА ДП ЦЦ)
+					p
+						label Имя
+						input(required)
+					p
+						label Фамилия
+						input(required)
+					p
+						label Отчество
+						input(required)
+					p
+						label Дата рождения
+						input(required type='datetime-local')
+					p
+						label Серия паспорта
+						input(required)
+					p
+						label Номер паспорта
+						input(required type='number')
+					p
+						label Город проживания
+						input(required)
+					p
+						label Улица проживания
+						input(required)
+					p
+						label Номер дома
+						input(required type='number')
+					p
+						label Номер квартиры
+						input(requiredt type='number')
+					p
+						label Серийный номер личного ЭВМ
+						input(required type='number')
+				fieldset
+					legend Данные, необходиые для заявления на устройство редактором портала #[q РосГосЗнания] (по форме У статьи 246 КП УА ДП ЦЦ)
+					p
+						label Код основной рабочей профессии
+						input(required type='number')
+					p
+						label Номер СПИЛС
+						input(required type='number')
+					p
+						label Код оконченного учебного заведения
+						input(required type='number')
+					p
+						label Номер аттестата
+						input(required type='number')
+				p
+					label Обратите внимание, необходимо заполнить все поля.
+					input(type='submit' value='Отправить')
+		
+		include inc/_footer.pug

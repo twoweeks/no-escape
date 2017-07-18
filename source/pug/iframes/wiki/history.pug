@@ -1,0 +1,17 @@
+doctype html
+html
+	head
+		include inc/_head.pug
+	body
+		include inc/_header.pug
+
+		main
+			div
+				h3 История страны
+				div.note
+					p #[b Внимание!] Эта статья в данный момент переписывается. Пожалуйста, не считайте указанную на ней информацию едино достоверной. Спасибо.
+				p.toc
+					ul
+						+newTOCItem('test', 'test1')
+
+		//-include inc/_footer.pug

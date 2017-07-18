@@ -17,6 +17,8 @@ var $lss = {
 var random = ((min, max) => Math.floor(Math.random() * (max - min + 1)) + min)
 
 var choseSite = (site => {
+	if (!Object.keys(sitesList).includes('main')) return;
+
 	let
 		currentSite = $lss.get('currentSite'),
 		currentSiteBlock = $make.qs(`.game .game--site[data-site='${currentSite}']`)
@@ -26,9 +28,11 @@ var choseSite = (site => {
 	}
 
 	$lss.set('currentSite', site)
+	let newTitle = `${sitesList[site].title}${(sitesList[site].subtitle && sitesList[site].subtitle != '') ? ' – ' + sitesList[site].subtitle : ''}`
 
 	setTimeout(() => {
 		$make.qs(`.game .game--site[data-site='${site}']`).classList.add('active')
+		document.title = newTitle
 	}, 0)
 	//}, random(2000, 5000))
 })

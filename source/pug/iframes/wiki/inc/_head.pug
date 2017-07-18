@@ -1,0 +1,16 @@
+include ../../../inc/_vars.pug
+include ../../../inc/_all.pug
+
+mixin newListItem(link, text)
+	li #[a(href=`./${link}.html`) #{text}]
+
+mixin newTOCItem(ref, text)
+	li #[a(href=`#${ref}`) #{text}]
+
+mixin un(text)
+	a.un(href='./create-article.html' title='Статьи на эту тему пока нет! Хотите создать?') #{text}
+
+mixin link(article, text, ref)
+	a(href=`./${article}.html${(ref) ? '#' + ref : ''}`) #{text}
+
+link(rel='stylesheet' href=`/assets/css/wiki.min.css?v=${project.ver}`)

@@ -3,6 +3,7 @@
 var sitesList = {
 	main: {
 		title: 'РосГосКоннект',
+		subtitle: 'государтвенный провайдер',
 		logo: ''
 	},
 	temple: {
@@ -11,6 +12,7 @@ var sitesList = {
 	},
 	wiki: {
 		title: 'РосГосЗнания',
+		subtitle: 'большая энциклопедия обо всём',
 		iframe: 'wiki/index.html',
 		shot: 'sss.png',
 		logo: ''

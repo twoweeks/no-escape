@@ -1,9 +1,20 @@
 doctype html
 html
 	head
-		include ../../inc/_vars.pug
-		include ../../inc/_all.pug
-		
-		link(rel='stylesheet' href=`/assets/css/wiki.min.css?v=${project.ver}`)
+		- var isIndex = true
+		include inc/_head.pug
 	body
-		p вики!
+		include inc/_header.pug
+
+		main
+			h3 Главная страница
+			p Приветствуем Вас на портале #[q РосГосЗнания]! На текущий момент у нас доступно уже более 5 статей:
+			ul.list
+				+newListItem('history', 'История страны')
+				+newListItem('rosgosconnect', 'РосГосКоннект')
+				+newListItem('rossnaniya', 'РосГосЗнания')
+				+newListItem('dvach', 'Двачат')
+				+newListItem('rosklassneekye', 'РосКлассники')
+				+newListItem('cats-site', 'Котики и кошки (сайт)')
+
+		include inc/_footer.pug
