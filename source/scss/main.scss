@@ -1,6 +1,4 @@
-@import
-	'inc/vars',
-	'inc/every';
+@import 'inc/vars', 'inc/every', 'inc/mixins';
 
 body {
 	display: -ms-grid;
@@ -10,9 +8,33 @@ body {
 
 	-ms-grid-columns: $panelWidth auto;
 	grid-template-columns: $panelWidth auto;
+
+	overflow-y: hidden;
+
+	& > * {
+		overflow-y: auto;
+	}
+
+	min-width: 625px;
 }
 
 @import 'inc/panel';
 
-@import
-	'inc/sites/main/style';
+.game {
+	min-width: 400px;
+	background-image: url('/assets/img/loading.png');
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-color: #f2f2f2;
+
+	iframe {
+		border: 0;
+	}
+
+	&--site {
+		min-width: 100%; min-height: 100%;
+		&:not(.active) { display: none }
+	}
+
+	@import 'inc/sites/main/style';
+}
