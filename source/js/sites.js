@@ -4,10 +4,12 @@ var sitesList = {
 	main: {
 		title: 'РосГосКоннект',
 		subtitle: 'государтвенный провайдер',
+		iframe: 'main/index.html',
 		logo: ''
 	},
 	temple: {
 		title: 'Террор Темпл',
+		iframe: 'temple/index.html',
 		hidden: true
 	},
 	wiki: {
@@ -31,6 +33,7 @@ var sitesList = {
 	},
 	board: {
 		title: 'Двачат',
+		iframe: 'dvach/index.html',
 		shot: '',
 		logo: ''
 	},
@@ -95,13 +98,5 @@ var sitesContent = {
 		container.appendChild(main)
 		container.appendChild(footer)
 		return container
-	},
-	board: () => {
-		let s = $create.elem('div')
-		return s
-	},
-	temple: () => {
-		let s = $create.elem('div')
-		return s
 	}
 }

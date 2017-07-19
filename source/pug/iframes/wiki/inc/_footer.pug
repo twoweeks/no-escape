@@ -1,5 +1,6 @@
 footer
-	p Мы ведём набор в редакторы РосЗнаний. Если Вам это интересно, то Вы можете оставить свою кандидатуру на рассмотрение #[a(href='./request.html') здесь].
-	p.copy &copy; #[a(href='.') РосГосЗнания]
+	p Мы ведём набор в редакторы РосЗнаний. Если Вам это интересно, то Вы можете оставить свою кандидатуру на рассмотрение #[+link('request', 'здесь')].
+	p.copy &copy; #[+link('index', 'РосГосЗнания')]
 
-	script(src=`/assets/js/special/iframes.min.js?v=${project.ver}` async)
+	each JS in ['iframes', 'sites/wiki']
+		script(src=`/assets/js/${JS}.min.js?v=${project.ver}` defer)

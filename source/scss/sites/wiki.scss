@@ -1,4 +1,6 @@
-@import 'inc/vars', 'inc/every', 'inc/mixins';
+@import '../inc/vars';
+@import '../inc/every';
+@import '../inc/mixins';
 
 $width: 1000px;
 
@@ -10,6 +12,12 @@ footer, header {
 	text-align: center;
 }
 
+@import '../inc/links';
+span[data-link='create-article'] {
+	color: #dd0000;
+	&:hover { color: #9f0000 }
+}
+
 header {
 	border-bottom: 1px dotted #000;
 	padding: 10px;
@@ -18,10 +26,9 @@ header {
 		font-family: 'Courier New';
 		font-size: 5em;
 
-		a {
+		span[data-link] {
 			text-decoration: none;
 			color: #000;
-			@include transition(.3s);
 
 			&:hover {
 				color: lighten(#000, 40%);
@@ -53,11 +60,27 @@ main {
 		background-color: #f9ffd6;
 		border: 1px solid #ccc;
 		padding: 5px;
-		margin: 5px 0;
+		margin: 5px 0 15px;
 	}
 
-	.list {
+	.list, .toc {
 		li { margin-left: 1.3em }
+	}
+
+	.toc {
+		border: 1px solid #ccc;
+		width: fit-content;
+		float: left;
+		padding: 5px;
+		margin: 0 10px 10px 0;
+
+		p:first-child {
+			margin-bottom: 5px;
+		}
+
+		li {
+			padding: 2px 0;
+		}
 	}
 
 	form {

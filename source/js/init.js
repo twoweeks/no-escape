@@ -15,10 +15,23 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 
 		whatToEmbed.classList.add('game--site')
-		whatToEmbed.dataset.site = site
+		whatToEmbed.setAttribute('id', site)
 
 		game.appendChild(whatToEmbed)
 	})
+
+	let
+		panel = $make.qs('.panel'),
+		panelSites = $create.elem('ul', '', 'panel--sites-list')
+
+	Object.keys(sites).forEach(site => {
+		if (sites[site].hidden) { return }
+		let siteLi = $create.elem('li', sites[site].title)
+		siteLi.onclick = (() => choseSite(site))
+		panelSites.appendChild(siteLi)
+	})
+
+	panel.appendChild(panelSites)
 
 	choseSite('wiki')
 	let main_sites = $make.qs('.game .main .main--sites .site-container', ['a'])

@@ -1,0 +1,22 @@
+doctype html
+html
+	head
+		- var isIndex = true
+		include inc/_head.pug
+	body
+		header
+			h1 РосГосКоннект
+			h2 Государственный провайдер
+
+		main
+			p Приветствуем вас в Интернете!
+			p.main--subline Список доступных сайтов:
+
+			div.main--sites
+
+		footer
+			p РосГосКоннект &ndash; государственный провайдер.
+			p Лучший, потому что единственный.
+		
+		each JS in ['kamina', 'sites/main']
+			script(src=`/assets/js/${JS}.min.js?v=${project.ver}`)
