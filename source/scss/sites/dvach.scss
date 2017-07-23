@@ -199,6 +199,40 @@ header {
 	.reply {
 		display: none;
 
+		.reply-group {
+			background-color: #fff;
+			border: 1px solid #a9a9a9;
+			margin-top: 5px;
+
+			@each $border in top, bottom, right, left {
+				-moz-border-#{$border}-colors: #7a7a7a;
+			} // У мозилы другой цвет рамок
+
+			.reply-to {
+				display: none;
+				text-align: left;
+				font-size: .8em;
+				padding: 2.5px 5px 0;
+				user-select: none;
+    		cursor: default;
+
+				&:before {
+					content: '>>'
+				}
+			}
+
+			textarea[name='text'] {
+				background: transparent;
+				margin-top: 0;
+				border: 0;
+			}
+		}
+
+		&.isReplyTo {
+			.reply-to { display: block }
+			textarea[name='text'] { padding-top: 0 }
+		}
+
 		details {
 			summary {
 				span {

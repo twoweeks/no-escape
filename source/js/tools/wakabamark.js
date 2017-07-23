@@ -84,10 +84,7 @@ var WM = function() {
 		//>implying
 		if (this.options.greenquoting) {
 			//var result = "";
-			str = str.replace( // @TODO доработать
-				/^(?:\&gt;\&gt;)([^\r\n]+)/mg,
-				'<span class="reply-to" data-link-action>\&gt;\&gt;$1</span>'
-			).replace(
+			str = str.replace(
 				/^(?:\&gt;)([^\r\n]+)/mg,
 				'<span class="green">\&gt;$1</span>'
 			)
@@ -198,10 +195,6 @@ var kuTags = [
 	[['[SPOILER]', '[/SPOILER]'],  ['<span class="spoiler">', '</span>']]
 ]
 
-// var gameTags = [
-// 	[['>>', ''], ['<span data-link-action>', '</span>']]
-// ]
-
 var twoTags = [
 	[['[sub]', '[/sub]'],  ['<sub>', '</sub>']],
 	[['[SUB]', '[/SUB]'],  ['<sub>', '</sub>']],
@@ -229,7 +222,6 @@ var wm = new WM()
 wm.registerTags(wmTags)
 wm.registerTags(kuTags)
 wm.registerTags(twoTags)
-//wm.registerTags(gameTags)
 wm.registerTags(myUlTags)
 wm.registerTags(headers)
 wm.registerTags(quoteTags)

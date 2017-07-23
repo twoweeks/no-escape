@@ -66,7 +66,9 @@ html
 						summary [#[span]]
 						form(enctype='multipart/form-data')
 							input(name='name' maxlength='30' placeholder='Имя')
-							textarea(name='text' placeholder='Текст (до 3000 символов)' maxlength='3000' required)
+							div.reply-group
+								div.reply-to
+								textarea(name='text' placeholder='Текст (до 3000 символов)' maxlength='3000' required)
 							//-input(name='img' type="file" accept="image/png, image/gif, image/jpg, image/jpeg, image/webp")
 							button(type='submit') Ответить!
 
