@@ -155,31 +155,57 @@ header {
 		border-top: 1px solid #cacaca;
 
 		.thread {
-			padding: 10px 0;
-			margin-bottom: 50px;
+			padding: 10px;
+			margin-bottom: 20px;
 			border-bottom: 1px solid #cacaca;
 
-			&--top {
-				.trip { color: #228854 }
+			.trip { color: #228854 }
+
+			&__top {
+				&--show {
+					&:before {
+						content: 'Открыть';
+					}
+				}
 			}
 
-			.green { color: #789922 }
-			.spoiler {
-				background-color: #9f9f9f;
-				color: #9f9f9f;
+			&__content {
+				.green { color: #789922 }
+				.spoiler {
+					background-color: #9f9f9f;
+					color: #9f9f9f;
 
-				&:hover {
-					color: #fff;
+					&:hover {
+						color: #fff;
+					}
+				}
+			}
+		}
+
+		&.showOnlyOne {
+			.thread {
+				&:not(.oneWhichShow) {
+					display: none;
+				}
+
+				&.oneWhichShow {
+					.thread__top {
+						&--show {
+							&:before {
+								content: 'Закрыть';
+							}
+						}
+					}
 				}
 			}
 		}
 	}
 }
 
-main {
-	max-width: 1000px;
-	margin: 0 auto;
-}
+// main {
+// 	max-width: 1000px;
+// 	margin: 0 auto;
+// }
 
 @media screen and (max-width: 615px) {
 	.index {

@@ -1,16 +1,31 @@
 'use strict'
 
+var getTime = (timestamp => {
+	let
+		a = new Date(timestamp * 1000),
+		days = ['Вск', 'Пнд', 'Втр', 'Срд', 'Чтв', 'Птн', 'Суб']
+
+	let
+		year =   a.getFullYear().toString().substr(-2),
+		month =  (a.getMonth() >= 10) ? a.getMonth() : `0${a.getMonth()}`,
+		date =   (a.getDate() >= 10) ? a.getDate() : `0${a.getDate()}`,
+		hour =   (a.getHours() >= 10) ? a.getHours() : `0${a.getHours()}`,
+		min =    (a.getMinutes() >= 10) ? a.getMinutes() : `0${a.getMinutes()}`,
+		sec =    (a.getSeconds() >= 10) ? a.getSeconds() : `0${a.getSeconds()}`
+
+	return `${date}/${month}/${year} ${days[a.getDay()]} ${hour}:${min}:${sec}`
+})
+
 var $action = {
 	thread: (options => {
 		if (!options) options = {}
 		if (Object.keys(options).length == 0) return
 
-		let $lss = $pK.lss
-
 		let
 			text = options['text'],
 			name = options['name'] != '' ? options['name'] : 'Аноним',
-			subject = options['subj'] != '' ? options['subj'] : text.split(' ').slice(0,3).join(' ').substr(0, 15) + '...'
+			subject = options['subj'] != '' ? options['subj'] : text.split(' ').slice(0,3).join(' ').substr(0, 15) + '...',
+			date = options['date'] != '' ? options['date'] : getTime(new Date() / 1000)
 
 		if (!$pK.lss.get('counter')) { $pK.lss.set('counter', '0') }
 		let num = Number($pK.lss.get('counter'))
@@ -21,11 +36,24 @@ var $action = {
 		}
 
 		let
-			threadElem = $create.elem('div', '', 'thread'),
-			threadElemTop = $create.elem('div', '', 'thread--top'),
-			threadElemContent = $create.elem('div', '', 'thread--content')
+			befK = document.createTextNode('['),
+			afterK = document.createTextNode(']')
 
-		threadElemTop.innerHTML = `<b>${subject}</b> ${name} туду_здесь_дата №${num}`
+		let
+			threadElem = $create.elem('div', '', 'thread'),
+			threadElemTop = $create.elem('div', '', 'thread__top'),
+			threadElemTopShow = $create.elem('span', '', 'thread__top--show'),
+			threadElemContent = $create.elem('div', '', 'thread__content')
+
+		threadElem.dataset.threadNum = num
+		threadElemTopShow.dataset.linkAction = ''
+		threadElemTopShow.onclick = ((e) => {
+			$action.showThread(threadElem.dataset.threadNum)
+		})
+
+		threadElemTop.innerHTML = `<b>${subject}</b> ${name} <i>${getTime(new Date() / 1000)}</i> №${num} [`
+		threadElemTop.appendChild(threadElemTopShow)
+		threadElemTop.appendChild(afterK)
 
 		threadElemContent.innerHTML = wm.apply(text)
 
@@ -35,6 +63,23 @@ var $action = {
 		$pK.lss.set('counter', ++num)
 
 		return threadElem
+	}),
+	showThread: (num => {
+		let
+			threads = $make.qs('.threads').classList,
+			thread = $make.qs(`.thread[data-thread-num="${num}"]`).classList
+
+		if (threads.contains('showOnlyOne')) {
+			threads.remove('showOnlyOne')
+			thread.remove('oneWhichShow')
+		} else {
+		thread.add('oneWhichShow')
+			threads.add('showOnlyOne')
+			thread.add('oneWhichShow')
+		}
+	}),
+	post: (options => {
+
 	})
 }
 
@@ -51,6 +96,9 @@ document.addEventListener('DOMContentLoaded', () => {
 						bodyData.show = 'board'; break
 					case 'showIndex':
 						bodyData.show = 'index'; break
+					case '':
+					default:
+						return;
 				}
 			})
 		})
@@ -60,22 +108,17 @@ document.addEventListener('DOMContentLoaded', () => {
 		e.preventDefault()
 		let
 			data = new FormData(e.target),
-			text = data.get('text'),
 			name = data.get('name'),
-			subj = data.get('subj')
+			subj = data.get('subj'),
+			text = data.get('text')
 
-		let files = e.target.querySelector('input[name="img"]').files
-
-		console.log(files)
-
-		if (files.length != 0) {
-			let reader = new FileReader()
-		}
-
-		$make.qs('.threads').appendChild($action.thread({
+		$make.qs('.threads').insertBefore($action.thread({
 			name: name,
 			subj: subj,
 			text: text
-		}))
+		}), $make.qs('.threads').firstChild)
+
+		e.target.querySelector('*[name="subj"]').value = ''
+		e.target.querySelector('*[name="text"]').value = ''
 	})
 })

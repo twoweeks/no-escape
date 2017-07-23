@@ -13,5 +13,5 @@ html
 
 		div.game
 
-		each JS in ['kamina', 'core', 'sites', 'init']
+		each JS in ['kamina', 'core', 'sites', 'tools/preventReload', 'init']
 			script(src=`/assets/js/${JS}.min.js?v=${project.ver}` defer)
