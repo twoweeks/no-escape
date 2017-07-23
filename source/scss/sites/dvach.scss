@@ -13,8 +13,53 @@ body {
 	&[data-show='index'] {
 		& > div:not(.index) { display: none }
 	}
+
 	&[data-show='board'] {
 		& > div:not(.board) { display: none }
+	}
+
+	&[data-show='thread'] {
+		& > div:not(.board) { display: none }
+
+		.board {
+			header {
+				h2 {
+					span { cursor: pointer }
+				}
+			}
+
+			.create-thread {
+				display: none;
+			}
+
+			.reply {
+				display: block;
+			}
+
+			.thread {
+				&:not(.oneWhichShow) {
+					display: none;
+				}
+
+				&.oneWhichShow {
+					.thread__top {
+						&--show {
+							&:before {
+								content: 'Закрыть';
+							}
+						}
+					}
+
+					.thread__posts {
+						.post {
+							&:not(:nth-last-child(-n+3)) {
+								display: block;
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 }
 
@@ -94,9 +139,11 @@ header {
 		border-bottom: 1px solid #ccc;
 	}
 
-	.create-thread {
+	.create-thread, .reply {
 		text-align: center;
 		margin-top: 10px;
+		padding-bottom: 10px;
+		border-bottom: 1px solid #cacaca;
 
 		details {
 			summary {
@@ -149,14 +196,26 @@ header {
 		}
 	}
 
+	.reply {
+		display: none;
+
+		details {
+			summary {
+				span {
+					&:before {
+						content: 'Ответить в тред'
+					}
+				}
+			}
+		}
+	}
+
 	.threads {
-		padding-top: 10px;
-		margin-top: 20px;
-		border-top: 1px solid #cacaca;
+		margin-top: 10px;
 
 		.thread {
 			padding: 10px;
-			margin-bottom: 20px;
+			margin-bottom: 10px;
 			border-bottom: 1px solid #cacaca;
 
 			.trip { color: #228854 }
@@ -170,31 +229,28 @@ header {
 			}
 
 			&__content {
-				.green { color: #789922 }
-				.spoiler {
-					background-color: #9f9f9f;
-					color: #9f9f9f;
-
-					&:hover {
-						color: #fff;
-					}
-				}
+				padding: 10px 15px 5px;
 			}
-		}
 
-		&.showOnlyOne {
-			.thread {
-				&:not(.oneWhichShow) {
-					display: none;
-				}
+			.green { color: #789922 }
+			.spoiler {
+				background-color: #9f9f9f;
+				color: #9f9f9f;
 
-				&.oneWhichShow {
-					.thread__top {
-						&--show {
-							&:before {
-								content: 'Закрыть';
-							}
-						}
+				&:hover { color: #fff }
+			}
+
+			&__posts {
+				.post {
+					width: fit-content;
+					background-color: #ddd;
+					padding: 5px 10px;
+					margin-top: 5px;
+					border: solid 1px #ccc;
+					border-radius: 2px;
+
+					&:not(:nth-last-child(-n+3)) {
+						display: none;
 					}
 				}
 			}

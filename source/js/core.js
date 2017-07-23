@@ -34,6 +34,16 @@ var choseSite = (site => {
 
 	document.title = loadingTitles[random(0, (loadingTitles.length - 1))]
 
+	if (sitesList[site].logo && sitesList[site].logo != '') {
+		let link = $make.qs('link[rel*="icon"]') || $create.elem('link')
+		link.setAttribute('rel', 'shortcut icon')
+		link.setAttribute('href', sitesList[site].logo)
+		$make.qs('head').appendChild(link)
+	} else {
+		let link = $make.qs('link[rel*="icon"]')
+		if (link) link.remove()
+	}
+
 	$lss.set('currentSite', site)
 	let newTitle = `${sitesList[site].title}${(sitesList[site].subtitle && sitesList[site].subtitle != '') ? ' – ' + sitesList[site].subtitle : ''}`
 

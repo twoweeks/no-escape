@@ -5,19 +5,20 @@ var sitesList = {
 		title: 'РосГосКоннект',
 		subtitle: 'государтвенный провайдер',
 		iframe: 'main/index.html',
-		logo: ''
+		logo: '/assets/img/rgk-fav.png'
 	},
 	temple: {
 		title: 'Террор Темпл',
 		iframe: 'temple/index.html',
-		hidden: true
+		hidden: true,
+		logo: ''
 	},
 	wiki: {
 		title: 'РосГосЗнания',
 		subtitle: 'большая энциклопедия обо всём',
 		iframe: 'wiki/index.html',
 		shot: '',
-		logo: ''
+		logo: '/assets/img/rgz-fav.png'
 	},
 	kremlin: {
 		title: 'Президент',
@@ -42,7 +43,7 @@ var sitesList = {
 		title: 'РосКлассники',
 		iframe: 'ok/index.html',
 		shot: '',
-		logo: ''
+		logo: '/assets/img/rok-fav.png'
 	},
 	cats: {
 		title: 'Кошки и котики',

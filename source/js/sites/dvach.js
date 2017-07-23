@@ -2,8 +2,8 @@
 
 var getTime = (timestamp => {
 	let
-		a = new Date(timestamp * 1000),
-		days = ['Вск', 'Пнд', 'Втр', 'Срд', 'Чтв', 'Птн', 'Суб']
+		a =     new Date(timestamp * 1000),
+		days =  ['Вск', 'Пнд', 'Втр', 'Срд', 'Чтв', 'Птн', 'Суб']
 
 	let
 		year =   a.getFullYear().toString().substr(-2),
@@ -22,10 +22,10 @@ var $action = {
 		if (Object.keys(options).length == 0) return
 
 		let
-			text = options['text'],
-			name = options['name'] != '' ? options['name'] : 'Аноним',
-			subject = options['subj'] != '' ? options['subj'] : text.split(' ').slice(0,3).join(' ').substr(0, 15) + '...',
-			date = options['date'] != '' ? options['date'] : getTime(new Date() / 1000)
+			text =     options['text'],
+			name =     options['name'] != '' ? options['name'] : 'Аноним',
+			subject =  options['subj'] != '' ? options['subj'] : text.split(' ').slice(0, 3).join(' ').substr(0, 15) + (text.length > 15 ? '...' : ''),
+			date =     options['date'] != '' ? options['date'] : getTime(new Date() / 1000)
 
 		if (!$pK.lss.get('counter')) { $pK.lss.set('counter', '0') }
 		let num = Number($pK.lss.get('counter'))
@@ -36,16 +36,18 @@ var $action = {
 		}
 
 		let
-			befK = document.createTextNode('['),
-			afterK = document.createTextNode(']')
+			befK =    document.createTextNode('['),
+			afterK =  document.createTextNode(']')
 
 		let
-			threadElem = $create.elem('div', '', 'thread'),
-			threadElemTop = $create.elem('div', '', 'thread__top'),
-			threadElemTopShow = $create.elem('span', '', 'thread__top--show'),
-			threadElemContent = $create.elem('div', '', 'thread__content')
+			threadElem =         $create.elem('div', '', 'thread'),
+			threadElemTop =      $create.elem('div', '', 'thread__top'),
+			threadElemTopShow =  $create.elem('span', '', 'thread__top--show'),
+			threadElemContent =  $create.elem('div', '', 'thread__content'),
+			threadElemPosts =    $create.elem('div', '', 'thread__posts')
 
 		threadElem.dataset.threadNum = num
+		threadElem.dataset.threadPosts = 1
 		threadElemTopShow.dataset.linkAction = ''
 		threadElemTopShow.onclick = ((e) => {
 			$action.showThread(threadElem.dataset.threadNum)
@@ -59,27 +61,81 @@ var $action = {
 
 		threadElem.appendChild(threadElemTop)
 		threadElem.appendChild(threadElemContent)
+		threadElem.appendChild(threadElemPosts)
 
 		$pK.lss.set('counter', ++num)
 
+		$make.qs('.board .create-thread details').open = false
+
 		return threadElem
 	}),
-	showThread: (num => {
-		let
-			threads = $make.qs('.threads').classList,
-			thread = $make.qs(`.thread[data-thread-num="${num}"]`).classList
+	post: (options => {
+		if (!options) options = {}
+		if (Object.keys(options).length == 0) return
 
-		if (threads.contains('showOnlyOne')) {
-			threads.remove('showOnlyOne')
-			thread.remove('oneWhichShow')
+		let
+			text = options['text'],
+			name = options['name'] != '' ? options['name'] : 'Аноним',
+			date = options['date'] != '' ? options['date'] : getTime(new Date() / 1000)
+
+		if (!$pK.lss.get('counter')) { $pK.lss.set('counter', '0') }
+		let num = Number($pK.lss.get('counter'))
+
+		if (name.split('#')[1]) {
+			let split = name.split('#')
+			name = `${split[0]}<span class="trip">!${md5(split[2], 'majoc').substr(1, 10)}</span>`
+		}
+
+		let postNumITT = $make.qs(`.thread[data-thread-num="${options['num']}"]`).dataset.threadPosts
+
+		console.log(postNumITT)
+
+		let
+			befK =    document.createTextNode('['),
+			afterK =  document.createTextNode(']')
+
+		let
+			postElem =         $create.elem('div', '', 'post'),
+			postElemTop =      $create.elem('div', '', 'thread__top'),
+			postElemContent =  $create.elem('div', '', 'thread__content')
+
+		postElem.id = `post-${num}`
+
+		postElemTop.innerHTML = `${name} <i>${getTime(new Date() / 1000)}</i> №${num} &ndash; ${++postNumITT}`
+
+		postElemContent.innerHTML = wm.apply(text)
+
+		postElem.appendChild(postElemTop)
+		postElem.appendChild(postElemContent)
+
+		$pK.lss.set('counter', ++num)
+		$make.qs(`.thread[data-thread-num="${options['num']}"]`).dataset.threadPosts = postNumITT
+
+		return postElem
+	}),
+	showThread: (num => {
+		let body = document.body
+
+		if (body.dataset.show == 'thread') {
+			delete body.dataset.threadNum
+			body.dataset.show = 'board'
+			$make.qs('.thread.oneWhichShow').classList.remove('oneWhichShow')
+			$make.qs('.board .reply details').open = false
 		} else {
-		thread.add('oneWhichShow')
-			threads.add('showOnlyOne')
-			thread.add('oneWhichShow')
+			body.dataset.threadNum = num
+			body.dataset.show = 'thread'
+			$make.qs(`.thread[data-thread-num="${num}"]`).classList.add('oneWhichShow')
+			$make.qs('.board .create-thread details').open = false
 		}
 	}),
-	post: (options => {
+	showBoard: (() => {
+		let body = document.body
 
+		if (!body.dataset.threadNum || body.dataset.threadNum == '' || body.dataset.show == 'board') return;
+
+		delete body.dataset.threadNum
+		body.dataset.show = 'board'
+		$make.qs('.thread.oneWhichShow').classList.remove('oneWhichShow')
 	})
 }
 
@@ -104,6 +160,8 @@ document.addEventListener('DOMContentLoaded', () => {
 		})
 	}
 
+	$make.qs('.board header h2 span').onclick = (() => $action.showBoard())
+
 	$make.qs('.create-thread form').onsubmit = (e => {
 		e.preventDefault()
 		let
@@ -119,6 +177,28 @@ document.addEventListener('DOMContentLoaded', () => {
 		}), $make.qs('.threads').firstChild)
 
 		e.target.querySelector('*[name="subj"]').value = ''
+		e.target.querySelector('*[name="text"]').value = ''
+	})
+
+	$make.qs('.reply form').onsubmit = (e => {
+		e.preventDefault()
+
+		let body = document.body
+
+		if (!body.dataset.threadNum || body.dataset.threadNum == '') return;
+
+		let
+			data = new FormData(e.target),
+			num = body.dataset.threadNum,
+			name = data.get('name'),
+			text = data.get('text')
+
+		$make.qs('.thread.oneWhichShow .thread__posts').appendChild($action.post({
+			num: num,
+			name: name,
+			text: text
+		}), $make.qs('.threads').firstChild)
+
 		e.target.querySelector('*[name="text"]').value = ''
 	})
 })

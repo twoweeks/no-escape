@@ -2,7 +2,7 @@
 
 var WM = function() {
 	this.tags = []
-	this.bypasstags = []
+	this.bypassTags = []
 	this.lists = []
 
 	this.options = {
@@ -27,7 +27,7 @@ var WM = function() {
 		[/&/g, '&amp;'],
 	]
 
-	this.escRX = ((exp) => exp.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&"))
+	this.escRX = (exp => exp.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&'))
 
 	this.escHTML = function(string) {
 		for (let i = this.escapechars.length - 1; i >= 0; i--) {
@@ -45,7 +45,7 @@ var WM = function() {
 			capture = inline ? '((?:(?!<br(?: \/)?>).)*)' : '([\\s\\S]+?)',
 			exp = new RegExp(pattern[0] + capture + pattern[1], 'mg')
 
-		return { exp: exp, rep: replace[0]+"$1"+replace[1] }
+		return { exp: exp, rep: replace[0] + '$1' + replace[1] }
 	}
 
 	this.apply = function(str) {
@@ -56,22 +56,22 @@ var WM = function() {
 
 		//Bypass
 		if (this.options.bypass) {
-			for (let i = this.bypasstags.length - 1; i >= 0; i--) {
-				tag = this.bypasstags[i];
+			for (let i = this.bypassTags.length - 1; i >= 0; i--) {
+				tag = this.bypassTags[i];
 					str = str.replace(tag.exp, function(match, p1, offset, s) {
-						let tagescapechars = [
-							[/\*/mg, '&#42;'],
-							[/_/mg, '&#95;'],
-							[/\[/mg, '&#91;'], [/\]/mg, '&#93;'],
-							[/%/mg, '&#37;'],
-							[/\&gt;/g, '&#62;'],
-							[/~/g, '&#126;'],
-							[/\//mg, '&#47;'], [/:/mg, '&#58;'], [/\./mg, '&#46;'],
-							[/\#/mg, '&#35;' /*MUST BE LAST*/],
+						let tagEscapeChars = [
+							[/\*/mg,    '&#42;'],
+							[/_/mg,     '&#95;'],
+							[/\[/mg,    '&#91;'], [/\]/mg, '&#93;'],
+							[/%/mg,     '&#37;'],
+							[/\&gt;/g,  '&#62;'],
+							[/~/g,      '&#126;'],
+							[/\//mg,    '&#47;'], [/:/mg, '&#58;'], [/\./mg, '&#46;'],
+							[/\#/mg,    '&#35;' /* MUST BE LAST */],
 						], after
 
-						for (let j = tagescapechars.length - 1; j >= 0; j--) {
-							after = p1.replace(tagescapechars[j][0], tagescapechars[j][1]);
+						for (let j = tagEscapeChars.length - 1; j >= 0; j--) {
+							after = p1.replace(tagEscapeChars[j][0], tagEscapeChars[j][1]);
 							// console.log('before: '+p1+', after: '+after)
 							p1 = after
 						}
@@ -84,7 +84,10 @@ var WM = function() {
 		//>implying
 		if (this.options.greenquoting) {
 			//var result = "";
-			str = str.replace(
+			str = str.replace( // @TODO доработать
+				/^(?:\&gt;\&gt;)([^\r\n]+)/mg,
+				'<span class="reply-to" data-link-action>\&gt;\&gt;$1</span>'
+			).replace(
 				/^(?:\&gt;)([^\r\n]+)/mg,
 				'<span class="green">\&gt;$1</span>'
 			)
@@ -96,8 +99,8 @@ var WM = function() {
 				tag = this.lists[i]
 
 				let
-					xp = new RegExp('((?:(?:(?:^'+tag.exp+')(?:[^\\r\\n]+))(?:\\r|\\n?))+)', "mg"),
-					ixp = new RegExp('(?:'+tag.exp+')([^\\r\\n]+)', "mg")
+					xp = new RegExp('((?:(?:(?:^'+tag.exp+')(?:[^\\r\\n]+))(?:\\r|\\n?))+)', 'mg'),
+					ixp = new RegExp('(?:'+tag.exp+')([^\\r\\n]+)', 'mg')
 
 				str = str.replace(xp, function(match, p1, offset, s) {
 					let p = p1, list = p.split('\n'), result=tag.rep[0]
@@ -112,9 +115,9 @@ var WM = function() {
 			}
 		}
 
-		str = str.replace(/(\r\n|\n\r|\r|\n)/mg,"<br />")
+		str = str.replace(/(\r\n|\n\r|\r|\n)/mg,'<br>')
 
-		if (this.options.reduceNewlines) { str = str.replace(/(<br \/>){2,}/mg,"<br /><br />") }
+		if (this.options.reduceNewlines) { str = str.replace(/(<br \/>){2,}/mg, '<br><br>') }
 
 		//apply formatting
 		for (let i = this.tags.length - 1; i >= 0; i--) {
@@ -133,7 +136,7 @@ var WM = function() {
 	this.registerTags = function(tags, destination, inline) {
 		let tag = [], result
 
-		if (typeof inline === "undefined") inline = false
+		if (typeof inline === 'undefined') inline = false
 
 		if (destination === 'lists') {
 			for (let i = tags.length - 1; i >= 0; i--) {
@@ -147,7 +150,7 @@ var WM = function() {
 				result = this.newTag(tag[0], tag[1], inline)
 
 				if (destination === 'bypass') {
-					this.bypasstags.push(result)
+					this.bypassTags.push(result)
 				} else this.tags.push(result)
 			}
 		}
@@ -159,55 +162,74 @@ var arr_iterate = ((array, callback) => {
 })
 
 var headers = [
-	[['######','######'],  ['<h6>','</h6>']],
-	[['#####','#####'],    ['<h5>','</h5>']],
-	[['####','####'],      ['<h4>','</h4>']],
-	[['###','###'],        ['<h3>','</h3>']],
-	[['##','##'],          ['<h2>','</h2>']]
+	[['######', '######'],  ['<h6>', '</h6>']],
+	[['#####', '#####'],    ['<h5>', '</h5>']],
+	[['####', '####'],      ['<h4>', '</h4>']],
+	[['###', '###'],        ['<h3>', '</h3>']],
+	[['##', '##'],          ['<h2>', '</h2>']]
 ]
 
 var wmTags = [
-	[['**','**'],      ['<b>','</b>']],
+	[['**','**'],      ['<b>', '</b>']],
 	// [['__','__'],   ['<b>','</b>']],
-	[['*','*'],        ['<i>','</i>']],
+	[['*','*'],        ['<i>', '</i>']],
 	// [['_','_'],     ['<i>','</i>']]
 ]
 
 var quoteTags = [
-	[['[q]','[/q]'],          ['<blockquote>','</blockquote>']],
-	[['[quote]','[/quote]'],  ['<blockquote>','</blockquote>']]
+	[['[q]', '[/q]'],          ['<blockquote>', '</blockquote>']],
+	[['[Q]', '[/Q]'],          ['<blockquote>', '</blockquote>']],
+	[['[quote]', '[/quote]'],  ['<blockquote>', '</blockquote>']],
+	[['[QUOTE]', '[/QUOTE]'],  ['<blockquote>', '</blockquote>']]
 ]
 
 var kuTags = [
-	[['[b]','[/b]'],              ['<b>','</b>']],
-	[['[i]','[/i]'],              ['<i>','</i>']],
-	[['[u]','[/u]'],              ['<span style="text-decoration: underline">','</span>']],
-	[['[s]','[/s]'],              ['<strike>','</strike>']],
-	[['~~','~~'],                 ['<strike>','</strike>']],
-	[['%%','%%'],                 ['<span class="spoiler">','</span>']],
-	[['[spoiler]','[/spoiler]'],  ['<span class="spoiler">','</span>']],
-	[['[aa]','[/aa]'],            ['<span style="font-family: Mona,\'MS PGothic\' !important;">','</span>']]
+	[['[b]', '[/b]'],              ['<b>', '</b>']],
+	[['[B]', '[/B]'],              ['<b>', '</b>']],
+	[['[i]', '[/i]'],              ['<i>', '</i>']],
+	[['[I]', '[/I]'],              ['<i>', '</i>']],
+	[['[u]', '[/u]'],              ['<span style="text-decoration: underline">', '</span>']],
+	[['[U]', '[/U]'],              ['<span style="text-decoration: underline">', '</span>']],
+	[['[s]', '[/s]'],              ['<strike>', '</strike>']],
+	[['[S]', '[/S]'],              ['<strike>', '</strike>']],
+	[['~~', '~~'],                 ['<strike>', '</strike>']],
+	[['%%', '%%'],                 ['<span class="spoiler">', '</span>']],
+	[['[spoiler]', '[/spoiler]'],  ['<span class="spoiler">', '</span>']],
+	[['[SPOILER]', '[/SPOILER]'],  ['<span class="spoiler">', '</span>']]
+]
+
+// var gameTags = [
+// 	[['>>', ''], ['<span data-link-action>', '</span>']]
+// ]
+
+var twoTags = [
+	[['[sub]', '[/sub]'],  ['<sub>', '</sub>']],
+	[['[SUB]', '[/SUB]'],  ['<sub>', '</sub>']],
+	[['[sup]', '[/sup]'],  ['<sup>', '</sup>']],
+	[['[SUP]', '[/SUP]'],  ['<sup>', '</sup>']]
 ]
 
 var myUlTags = [
-	[['__','__'],	['<span style="text-decoration: underline">','</span>']]
+	[['__', '__'],	['<span style="text-decoration: underline">', '</span>']]
 ]
 
 var bypassTags = [
-	[['[code]','[/code]'],  ['<pre class="code">','</pre>']],
-	[['`','`'],             ['<pre class="inline code">','</pre>']]
+	[['[code]', '[/code]'],  ['<pre class="code">', '</pre>']],
+	[['[CODE]', '[/CODE]'],  ['<pre class="code">', '</pre>']],
+	[['`', '`'],             ['<pre class="inline code">', '</pre>']]
 ];
 
 var lists = [
-	["* ", ["<ul>","</ul>"]],
-	["# ", ["<ol>","</ol>"]]
+	["* ", ['<ul>', '</ul>']],
+	["# ", ['<ol>', '</ol>']]
 ];
 
 var wm = new WM()
 
-// wm.registerTags(inlineQ, 'tag', 'inline');
 wm.registerTags(wmTags)
 wm.registerTags(kuTags)
+wm.registerTags(twoTags)
+//wm.registerTags(gameTags)
 wm.registerTags(myUlTags)
 wm.registerTags(headers)
 wm.registerTags(quoteTags)
