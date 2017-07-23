@@ -1,0 +1,197 @@
+@import '../inc/vars';
+@import '../inc/every';
+@import '../inc/mixins';
+
+$color: #FF6600;
+$fontSize: 16px;
+
+body {
+	background-color: #EEE;
+	font-family: Verdana, sans-serif;
+	line-height: 1.5;
+
+	&[data-show='index'] {
+		& > div:not(.index) { display: none }
+	}
+	&[data-show='board'] {
+		& > div:not(.board) { display: none }
+	}
+}
+
+span[data-link], span[data-link-action],
+.board details summary span {
+	cursor: pointer;
+	color: #FF6600;
+
+	&:hover {
+		color: #0066FF;
+		text-decoration: underline;
+	}
+}
+
+header {
+	h1, h2 {
+		text-align: center;
+		color: darken($color, 2%);
+	}
+}
+
+.index {
+	max-width: 1000px;
+	margin: 0 auto;
+
+	.elem-style {
+		background-color: #fff;
+		margin: 15px 0;
+		border: 1px solid #ddd;
+	}
+
+	header {
+		.des {
+			padding: 20px;
+		}
+
+		.note {
+			background-color: #fbffdc;
+		}
+	}
+
+	main {
+		.boards-list {
+			font-size: 0;
+			padding: 10px;
+
+			.column {
+				display: inline-block;
+				vertical-align: top;
+				width: calc(100% / 4);
+				font-size: $fontSize;
+				padding: 5px;
+
+				p {
+					font-weight: 600;
+
+					&:not(:first-child) {
+						margin-top: 10px;
+					}
+				}
+
+				li {
+					list-style: none;
+
+					&:not(.clickable) {
+						cursor: default;
+						opacity: .5;
+					}
+				}
+			}
+		}
+	}
+}
+
+.board {
+	header {
+		border-bottom: 1px solid #ccc;
+	}
+
+	.create-thread {
+		text-align: center;
+		margin-top: 10px;
+
+		details {
+			summary {
+				&::-webkit-details-marker {
+					display: none;
+				}
+
+				span {
+					&:before {
+						content: 'Создать тред'
+					}
+				}
+
+				display: inline;
+				cursor: pointer;
+			}
+
+			&[open] {
+				summary {
+					span {
+						&:before {
+							content: 'Скрыть форму'
+						}
+					}
+				}
+			}
+		}
+
+		form {
+			width: 100%;
+			max-width: 700px;
+			margin: 0 auto;
+
+			input, textarea {
+				display: block;
+				width: 100%;
+				margin-top: 5px;
+				padding: 5px;
+			}
+
+			textarea {
+				height: 100px;
+				resize: none;
+			}
+
+			button {
+				margin-top: 5px;
+				padding: 2.5px 5px;
+			}
+		}
+	}
+
+	.threads {
+		padding-top: 10px;
+		margin-top: 20px;
+		border-top: 1px solid #cacaca;
+
+		.thread {
+			padding: 10px 0;
+			margin-bottom: 50px;
+			border-bottom: 1px solid #cacaca;
+
+			&--top {
+				.trip { color: #228854 }
+			}
+
+			.green { color: #789922 }
+			.spoiler {
+				background-color: #9f9f9f;
+				color: #9f9f9f;
+
+				&:hover {
+					color: #fff;
+				}
+			}
+		}
+	}
+}
+
+main {
+	max-width: 1000px;
+	margin: 0 auto;
+}
+
+@media screen and (max-width: 615px) {
+	.index {
+		main {
+			.boards-list {
+				text-align: center;
+
+				.column {
+					display: block;
+					width: 100%;
+				}
+			}
+		}
+	}
+}

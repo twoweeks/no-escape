@@ -1,0 +1,64 @@
+doctype html
+html
+	head
+		include inc/_head.pug
+	body(data-show='board')
+		div.index
+			header
+				h1 Двачат
+				h2 Добро пожаловать. Опять.
+				div.elem-style.des
+					p Двачат &ndash; это система форумов, где почти любая точка зрения имеет право на жизнь. Здесь нет регистрации и подписываться не нужно, хотя это не избавляет вас от необходимости соблюдать правила и законы страны. Все форумы (кроме #[+link2('showB', '/Б/есед')]), а их список находится снизу, имеют собственную чётко ограниченную тематику. Словом, всё, что не запрещено законами страны и правилами отдельно взятого форума и относится к его тематике, на этом форуме разрешено.
+				div.elem-style.des.note
+					p #[b Внимание!] Сейчас проводятся тех. работы, и все форумы, кроме #[+link2('showB', '/Б/есед')], временно закрыты. Приносим извинения за возникшие неудобства.
+
+			main
+				div.elem-style.boards-list
+					div.column
+						p Тематика
+						ul
+							each board in ['Автомобили', 'Велосипеды', 'Бизнес', 'Комиксы', 'Мода и стиль', 'Физкультура', 'Ин.языки', 'Футбол', 'История', 'Медицина', 'Магия', 'Коневодство', 'Мотоциклы', 'Фильмы', 'Музыка', 'Животные', 'Психология', 'Религия', 'Наука', 'Научная фантастика']
+								li #{board}
+					div.column
+						ul
+							each board in ['Паранормальное', 'Спорт', 'Космос', 'Сериалы', 'Образование', 'Оружие', 'Блицкриг', 'Военная техника', 'Обои и хайрез']
+								li #{board}
+						p Творчество
+						ul
+							each board in ['Архитектура', 'Кулинария', 'Хобби', 'Музыканты', 'Живопись', 'Фотография', 'Работа']
+								li #{board}
+					div.column
+						p Техника и софт
+						ul
+							li(onclick='alert("Привет!")') Разработка видеоигр
+							each board in ['ЭВМ', 'Программирование', 'Радиотехника', 'Программы', 'Техника']
+								li #{board}
+						p Видеоигры
+						ul
+							each board in ['Видеоигры (общее)', 'Настольные игры', 'Игровые автоматы', 'Визуальные новеллы', 'Петька', 'Текстовые игры']
+								li #{board}
+					div.column
+						p Разное
+						ul
+							li.clickable #[+link2('showB', '/Б/еседы')]
+							each board in ['Работа ресурса', 'Встречи', 'Анимация', 'Пожелания', 'Рисунки']
+								li #{board}
+
+		div.board
+			header
+				h2 Беседы
+
+			main
+				div.create-thread
+					details
+						summary [#[span]]
+						form(enctype='multipart/form-data')
+							input(name='name' placeholder='Имя')
+							input(name='subj' placeholder='Тема')
+							textarea(name='text' placeholder='Текст (до 15000 символов)' maxlength='15000' required)
+							input(name='img' type="file" accept="image/png, image/gif, image/jpg, image/jpeg, image/webp")
+							button(type='submit') Создать!
+				div.threads
+
+		each JS in ['iframes', 'kamina', 'tools/wakabamark', 'tools/md5', 'sites/dvach']
+			script(src=`/assets/js/${JS}.min.js?v=${project.ver}` defer)

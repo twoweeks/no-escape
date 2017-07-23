@@ -1,6 +1,6 @@
 'use strict'
 
-if (window.self == window.top) document.body.textContent = 'Так нельзя!'
+//if (window.self == window.top) document.body.textContent = 'Так нельзя!'
 
 var $pK = { // parent Kamina
 	make: parent.$make,

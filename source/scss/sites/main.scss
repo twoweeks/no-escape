@@ -3,7 +3,7 @@
 @import '../inc/every';
 
 body {
-	background-color: #00c4ff;
+	background-color: #25539b;
 	text-align: center;
 	color: #fff;
 }
@@ -16,6 +16,25 @@ header {
 	margin-bottom: 10px;
 	font-size: 150%;
 	border-bottom: 5px dashed #fff;
+
+	h1 {
+		position: relative;
+
+		&:before {
+			content: '';
+			background-image: url('/assets/img/rgk-logo.png');
+			background-size: contain;
+			background-repeat: no-repeat;
+			background-position: center right;
+			position: absolute;
+			width: 100px; height: 100%;
+			margin-left: -100px;
+		}
+	}
+
+	h2 {
+		margin-top: 5px;
+	}
 }
 
 main {

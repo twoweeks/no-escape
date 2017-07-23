@@ -1,0 +1,7 @@
+include ../../../inc/_vars.pug
+include ../../../inc/_all.pug
+
+mixin link2(action, text)
+	span(data-link-action=`${action}`) #{text}
+
+link(rel='stylesheet' href=`/assets/css/sites/dvach.min.css?v=${project.ver}`)
