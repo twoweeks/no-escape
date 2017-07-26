@@ -48,6 +48,10 @@ body {
 								content: 'Закрыть';
 							}
 						}
+
+						&--reply {
+							display: inline;
+						}
 					}
 
 					.thread__posts {
@@ -56,6 +60,10 @@ body {
 								display: block;
 							}
 						}
+					}
+
+					.thread__replies {
+						display: block;
 					}
 				}
 			}
@@ -217,7 +225,7 @@ header {
     		cursor: default;
 
 				&:before {
-					content: '>>'
+					content: '>>' attr(data-reply-to);
 				}
 			}
 
@@ -260,10 +268,32 @@ header {
 						content: 'Открыть';
 					}
 				}
+
+				&--reply {
+					display: none;
+				}
+
+				&.post-type {
+					&--mod {
+						.nickname { color: #0085d9 }
+					}
+
+					&--admin {
+						.nickname { color: #ce00ef }
+					}
+				}
 			}
 
 			&__content {
 				padding: 10px 15px 5px;
+
+				span[data-link], span[data-link-action] {
+					text-decoration: underline;
+				}
+
+				span[data-link-reply-to] {
+					&:before { content: '>>' }
+				}
 			}
 
 			.green { color: #789922 }
@@ -286,6 +316,29 @@ header {
 					&:not(:nth-last-child(-n+3)) {
 						display: none;
 					}
+
+					.thread {
+						&__top {
+							font-size: .9em
+						}
+					}
+
+					&:target {
+						background-color: #fbffbb;
+						border-left: 2px dashed #f00;
+					}
+				}
+			}
+
+			&__replies {
+				display: none;
+				font-size: .6em;
+
+				&:empty { display: none !important }
+				&:before { content: 'Ответы: ' }
+
+				&--reply {
+					&:before { content: '>>' }
 				}
 			}
 		}

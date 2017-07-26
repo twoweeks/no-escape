@@ -1,3 +1,11 @@
 .panel {
 	background-color: #eee4ff;
+
+	&__sites-list {
+		li {
+			text-align: center;
+			padding: 10px;
+			cursor: pointer;
+		}
+	}
 }

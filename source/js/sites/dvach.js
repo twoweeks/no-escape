@@ -1,5 +1,12 @@
 'use strict'
 
+var $K = {
+	before: () => document.createTextNode('['),
+	after: () => document.createTextNode(']'),
+	space: () => document.createTextNode(' '),
+	br: () => $create.elem('br')
+}
+
 var getTime = (timestamp => {
 	let
 		a =     new Date(timestamp * 1000),
@@ -27,7 +34,7 @@ var $action = {
 			subject =  options['subj'] != '' ? options['subj'] : text.split(' ').slice(0, 3).join(' ').substr(0, 15) + (text.length > 15 ? '...' : ''),
 			date =     options['date'] != '' ? options['date'] : getTime(new Date() / 1000)
 
-		if (!$pK.lss.get('counter')) { $pK.lss.set('counter', '0') }
+		if (!$pK.lss.get('counter')) { $pK.lss.set('counter', '1') }
 		let num = Number($pK.lss.get('counter'))
 
 		if (name.split('#')[1]) {
@@ -36,31 +43,51 @@ var $action = {
 		}
 
 		let
-			befK =    document.createTextNode('['),
-			afterK =  document.createTextNode(']')
-
-		let
 			threadElem =         $create.elem('div', '', 'thread'),
 			threadElemTop =      $create.elem('div', '', 'thread__top'),
 			threadElemTopShow =  $create.elem('span', '', 'thread__top--show'),
 			threadElemContent =  $create.elem('div', '', 'thread__content'),
-			threadElemPosts =    $create.elem('div', '', 'thread__posts')
+			threadElemPosts =    $create.elem('div', '', 'thread__posts'),
+			threadElemRefs =       $create.elem('div', '', 'thread__replies')
 
+		switch (options['type']) {
+			case 'admin':
+				threadElemTop.classList.add('post-type--admin'); break
+			case 'mod':
+				threadElemTop.classList.add('post-type--mod'); break
+		}
+
+		threadElem.id = `post-${num}`
 		threadElem.dataset.threadNum = num
 		threadElem.dataset.threadPosts = 1
 		threadElemTopShow.dataset.linkAction = ''
-		threadElemTopShow.onclick = ((e) => {
+		threadElemTopShow.onclick = (() => {
 			$action.showThread(threadElem.dataset.threadNum)
 		})
 
-		threadElemTop.innerHTML = `<b>${subject}</b> ${name} <i>${getTime(new Date() / 1000)}</i> №${num} [`
+		let
+			replyElem = $create.elem('span', '', 'thread__top--reply'),
+			replyElemPh = $create.elem('span', 'Ответить')
+
+		replyElemPh.dataset.linkAction = ''
+		replyElemPh.onclick = ((e) => {
+			$action.reply(threadElem.dataset.threadNum)
+		})
+
+		replyElem.innerHTML = ' ['
+		replyElem.appendChild(replyElemPh)
+		replyElem.appendChild($K.after())
+
+		threadElemTop.innerHTML = `<b>${subject}</b> <span class="nickname">${name}</span> <i>${getTime(new Date() / 1000)}</i> №${num} [`
 		threadElemTop.appendChild(threadElemTopShow)
-		threadElemTop.appendChild(afterK)
+		threadElemTop.appendChild($K.after())
+		threadElemTop.appendChild(replyElem)
 
 		threadElemContent.innerHTML = wm.apply(text)
 
 		threadElem.appendChild(threadElemTop)
 		threadElem.appendChild(threadElemContent)
+		threadElem.appendChild(threadElemRefs)
 		threadElem.appendChild(threadElemPosts)
 
 		$pK.lss.set('counter', ++num)
@@ -88,25 +115,64 @@ var $action = {
 
 		let postNumITT = $make.qs(`.thread[data-thread-num="${options['num']}"]`).dataset.threadPosts
 
-		console.log(postNumITT)
-
-		let
-			befK =    document.createTextNode('['),
-			afterK =  document.createTextNode(']')
-
 		let
 			postElem =         $create.elem('div', '', 'post'),
 			postElemTop =      $create.elem('div', '', 'thread__top'),
-			postElemContent =  $create.elem('div', '', 'thread__content')
+			postElemContent =  $create.elem('div', '', 'thread__content'),
+			postElemRefs =     $create.elem('div', '', 'thread__replies')
 
 		postElem.id = `post-${num}`
+		postElem.dataset.postNum = num
+
+		let
+			replyElem = $create.elem('span', '', 'thread__top--reply'),
+			replyElemPh = $create.elem('span', 'Ответить')
+
+		replyElemPh.dataset.linkAction = ''
+		replyElemPh.onclick = ((e) => {
+			$action.reply(postElem.dataset.postNum)
+		})
+
+		replyElem.innerHTML = ' ['
+		replyElem.appendChild(replyElemPh)
+		replyElem.appendChild($K.after())
 
 		postElemTop.innerHTML = `${name} <i>${getTime(new Date() / 1000)}</i> №${num} &ndash; ${++postNumITT}`
+		postElemTop.appendChild(replyElem)
 
-		postElemContent.innerHTML = wm.apply(text)
+		if (options['reply'] && options['reply'] != '') {
+			let
+				postReplyLink = $create.elem('span', `${options['reply']}`, 'post-reply-link'),
+				haveNoIdea = $make.qs(`#post-${options['reply']} .thread__replies`),
+				postWhichReplied = $create.elem('span', `${num}`, 'thread__replies--reply')
+
+			postReplyLink.dataset.linkAction = ''
+			postReplyLink.dataset.linkReplyTo = options['reply']
+
+			postWhichReplied.dataset.linkAction = ''
+			postWhichReplied.dataset.linkTo = num
+
+			postWhichReplied.onclick = (e => {
+				if (document.body.dataset.show = 'thread') $make.qs(`#post-${e.target.dataset.linkTo}`).scrollIntoView(true)
+			})
+
+			postReplyLink.onclick = (e => {
+				if (document.body.dataset.show = 'thread') $make.qs(`#post-${e.target.dataset.linkReplyTo}`).scrollIntoView(true)
+			})
+
+			postElemContent.appendChild(postReplyLink)
+			postElemContent.appendChild($K.br())
+
+			haveNoIdea.appendChild(postWhichReplied)
+			haveNoIdea.appendChild($K.space())
+		}
+
+		let postElemContentSpan = $create.elem('span', wm.apply(text))
+		postElemContent.appendChild(postElemContentSpan)
 
 		postElem.appendChild(postElemTop)
 		postElem.appendChild(postElemContent)
+		postElem.appendChild(postElemRefs)
 
 		$pK.lss.set('counter', ++num)
 		$make.qs(`.thread[data-thread-num="${options['num']}"]`).dataset.threadPosts = postNumITT
@@ -114,7 +180,14 @@ var $action = {
 		return postElem
 	}),
 	showThread: (num => {
-		let body = document.body
+		let
+			body = document.body,
+			replyFormC = $make.qs('.reply')
+
+		if (replyFormC.classList.contains('isReplyTo')) {
+			replyFormC.classList.remove('isReplyTo')
+			delete replyFormC.querySelector('form .reply-to').dataset.replyTo
+		}
 
 		if (body.dataset.show == 'thread') {
 			delete body.dataset.threadNum
@@ -136,6 +209,18 @@ var $action = {
 		delete body.dataset.threadNum
 		body.dataset.show = 'board'
 		$make.qs('.thread.oneWhichShow').classList.remove('oneWhichShow')
+	}),
+	reply: (num => {
+		let
+			replyForm = $make.qs('.reply'),
+			replyFromDe = replyForm.querySelector('details'),
+			replyFromDeNum = replyFromDe.querySelector('.reply-to')
+
+		replyForm.scrollIntoView(true)
+
+		replyForm.classList.add('isReplyTo')
+		replyFromDe.open = true
+		replyFromDeNum.dataset.replyTo = num
 	})
 }
 
@@ -146,7 +231,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	if (actionBtns) {
 		Array.from(actionBtns).forEach(btn => {
-			btn.onclick = (() => {
+			btn.onclick = ((e) => {
 				switch (btn.dataset.linkAction) {
 					case 'showB':
 						bodyData.show = 'board'; break
@@ -159,6 +244,13 @@ document.addEventListener('DOMContentLoaded', () => {
 			})
 		})
 	}
+
+	$make.qs('.threads').insertBefore($action.thread({
+		name: '## MOD ##',
+		type: 'mod',
+		subj: 'Объявление',
+		text: '###Здравствуйте!###В данный момент проводятся технические работы, и все сайты Сети недоступны. Кроме нас. Поэтому сегодня ожидается небывалый наплыв пользователей!\n\nНа нашей уютной имиджборде Вы можете пообщаться друг с другом, а также потестировать функционал. При возникновении неполадок Вы можете отправить письмо на эмэйл cheyscooler@mail.ru, администрация постарается ответить как можно быстрее.\n\nВозможность постинга картинок сейчас отключена из-за слишком высокой нагрузки на сервер, но мы работаем над этим.\n\nПриятного времяпрепровождения, надеемся, Вам у нас понравится! Не забывайте, что здесь сидят все Ваши одноклассники.'
+	}), $make.qs('.threads').firstChild)
 
 	$make.qs('.board header h2 span').onclick = (() => $action.showBoard())
 
@@ -180,10 +272,17 @@ document.addEventListener('DOMContentLoaded', () => {
 		e.target.querySelector('*[name="text"]').value = ''
 	})
 
+	/*
+	 * @TODO Сделать так, чтобы когда отписали в треде, он поднимался наверх (бамп)
+	 * @TODO Сделать скрытие и сажу
+	 */
+
 	$make.qs('.reply form').onsubmit = (e => {
 		e.preventDefault()
 
-		let body = document.body
+		let
+			body = document.body,
+			thisFormParC = $make.qs('.reply').classList
 
 		if (!body.dataset.threadNum || body.dataset.threadNum == '') return;
 
@@ -193,11 +292,24 @@ document.addEventListener('DOMContentLoaded', () => {
 			name = data.get('name'),
 			text = data.get('text')
 
-		$make.qs('.thread.oneWhichShow .thread__posts').appendChild($action.post({
+		let postData = {
 			num: num,
 			name: name,
 			text: text
-		}), $make.qs('.threads').firstChild)
+		}
+
+		if (thisFormParC.contains('isReplyTo')) {
+			postData['reply'] = e.target.querySelector('.reply-to').dataset.replyTo
+		}
+
+		$make.qs('.thread.oneWhichShow .thread__posts').appendChild($action.post(postData), $make.qs('.threads').firstChild)
+
+		if (thisFormParC.contains('isReplyTo')) {
+			thisFormParC.remove('isReplyTo')
+ 			delete e.target.querySelector('.reply-to').dataset.replyTo
+		}
+
+		$make.qs('.reply').scrollIntoView(false)
 
 		e.target.querySelector('*[name="text"]').value = ''
 	})

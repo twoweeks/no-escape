@@ -45,7 +45,7 @@ html
 								li #{board}
 
 		div.board
-			header
+			header#head
 				h2
 					span Беседы
 
@@ -60,8 +60,8 @@ html
 							//-input(name='img' type="file" accept="image/png, image/gif, image/jpg, image/jpeg, image/webp")
 							button(type='submit') Создать!
 				div.threads
-				
-				div.reply
+
+				div.reply#reply
 					details
 						summary [#[span]]
 						form(enctype='multipart/form-data')

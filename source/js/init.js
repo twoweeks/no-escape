@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	let
 		panel = $make.qs('.panel'),
-		panelSites = $create.elem('ul', '', 'panel--sites-list')
+		panelSites = $create.elem('ul', '', 'panel__sites-list')
 
 	Object.keys(sites).forEach(site => {
 		if (sites[site].hidden) { return }
