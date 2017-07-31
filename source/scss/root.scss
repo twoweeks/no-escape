@@ -1,19 +1,13 @@
 @import 'inc/vars', 'inc/every', 'inc/mixins';
 
 body {
-	display: -ms-grid;
-	display: grid;
-
 	$panelWidth: 225px;
 
-	-ms-grid-columns: $panelWidth auto;
+	display: grid;
 	grid-template-columns: $panelWidth auto;
-
 	overflow-y: hidden;
 
-	& > * {
-		overflow-y: auto;
-	}
+	& > * { overflow-y: auto }
 
 	min-width: 625px;
 }

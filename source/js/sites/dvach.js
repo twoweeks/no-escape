@@ -1,11 +1,19 @@
 'use strict'
 
+/*
+ * Сокращение для вставки нод с разными символами
+ */
+
 var $K = {
 	before: () => document.createTextNode('['),
 	after: () => document.createTextNode(']'),
 	space: () => document.createTextNode(' '),
 	br: () => $create.elem('br')
 }
+
+/*
+ * Вставка строки с временем публикации поста
+ */
 
 var getTime = (timestamp => {
 	let
@@ -23,6 +31,45 @@ var getTime = (timestamp => {
 	return `${date}/${month}/${year} ${days[a.getDay()]} ${hour}:${min}:${sec}`
 })
 
+/*
+ * Вставка поста в тред
+ */
+
+var appendPost = () => {
+
+}
+
+/*
+ * Сохранение в сессионном хранилище ключа (айдишника) треда
+ */
+
+var setThreadKey = ((key, number) => {
+	if (!key && !number) return
+
+	let allData = {}, lssName = 'threads'
+
+	if ($pK.lss.get(lssName)) { allData = JSON.parse($pK.lss.get(lssName)) }
+
+	allData[key] = number
+	$pK.lss.set(lssName, JSON.stringify(allData))
+})
+
+var getThreadNum = (key => {
+	if (!key) return
+
+	let allData = JSON.parse($pK.lss.get('threads'))
+
+	return allData[key]
+})
+
+/*
+ * .thread() - создание треда
+ * .post() - создание поста в треде
+ * .showThread() - открыть конкретный тред
+ * .showBoard() - открыть нулевую
+ * .reply() - ответ на определённый пост/тред
+ */
+
 var $action = {
 	thread: (options => {
 		if (!options) options = {}
@@ -30,8 +77,8 @@ var $action = {
 
 		let
 			text =     options['text'],
-			name =     options['name'] != '' ? options['name'] : 'Аноним',
-			subject =  options['subj'] != '' ? options['subj'] : text.split(' ').slice(0, 3).join(' ').substr(0, 15) + (text.length > 15 ? '...' : ''),
+			name =     (options['name'] && options['name'] != '') ? options['name'] : 'Аноним',
+			subject =  (options['subj'] && options['subj'] != '') ? options['subj'] : text.split(' ').slice(0, 3).join(' ').substr(0, 15) + (text.length > 15 ? '...' : ''),
 			date =     options['date'] != '' ? options['date'] : getTime(new Date() / 1000)
 
 		if (!$pK.lss.get('counter')) { $pK.lss.set('counter', '1') }
@@ -90,6 +137,8 @@ var $action = {
 		threadElem.appendChild(threadElemRefs)
 		threadElem.appendChild(threadElemPosts)
 
+		if (options['key'] && options['key'] != '') { setThreadKey(options['key'], num) }
+
 		$pK.lss.set('counter', ++num)
 
 		$make.qs('.board .create-thread details').open = false
@@ -102,8 +151,7 @@ var $action = {
 
 		let
 			text = options['text'],
-			name = options['name'] != '' ? options['name'] : 'Аноним',
-			date = options['date'] != '' ? options['date'] : getTime(new Date() / 1000)
+			name = (options['name'] && options['name'] != '') ? options['name'] : 'Аноним'
 
 		if (!$pK.lss.get('counter')) { $pK.lss.set('counter', '0') }
 		let num = Number($pK.lss.get('counter'))
@@ -224,7 +272,15 @@ var $action = {
 	})
 }
 
+/*
+ * Инициации
+ */
+
 document.addEventListener('DOMContentLoaded', () => {
+	/*
+	 * Добавление событий на кнопки-действик
+	 */
+
 	let
 		actionBtns = $make.qs('span[data-link-action]', ['a']),
 		bodyData = document.body.dataset
@@ -245,14 +301,61 @@ document.addEventListener('DOMContentLoaded', () => {
 		})
 	}
 
-	$make.qs('.threads').insertBefore($action.thread({
-		name: '## MOD ##',
-		type: 'mod',
-		subj: 'Объявление',
-		text: '###Здравствуйте!###В данный момент проводятся технические работы, и все сайты Сети недоступны. Кроме нас. Поэтому сегодня ожидается небывалый наплыв пользователей!\n\nНа нашей уютной имиджборде Вы можете пообщаться друг с другом, а также потестировать функционал. При возникновении неполадок Вы можете отправить письмо на эмэйл cheyscooler@mail.ru, администрация постарается ответить как можно быстрее.\n\nВозможность постинга картинок сейчас отключена из-за слишком высокой нагрузки на сервер, но мы работаем над этим.\n\nПриятного времяпрепровождения, надеемся, Вам у нас понравится! Не забывайте, что здесь сидят все Ваши одноклассники.'
-	}), $make.qs('.threads').firstChild)
+	/*
+	 * Парсер базы данных с тредами/постами
+	 */
+
+	let
+		DB_theads =  DB['threads'],
+		DB_posts =   DB['posts']
+
+	var parseReplies = (options => {
+		if (!options) options = {}
+		if (Object.keys(options).length == 0) return
+
+		Object.keys(DB_posts[options.key]).forEach((id, i) => {
+			let
+				data = DB_posts[options.key][id],
+				offset = (options.time && options.time != '') ? 20000 * i + options.k : 10000 * i
+
+			let postData = {
+				num: getThreadNum(options.key),
+				text: data.text,
+				system: id
+			}
+
+			setTimeout(() => {
+				$make.qs(`.thread#post-${getThreadNum(options.key)} .thread__posts`).appendChild($action.post(postData))
+			}, offset)
+		})
+	})
+
+	Object.keys(DB_theads).forEach(key => {
+		let
+			data = {},
+			threadsElem = $make.qs('.threads')
+
+		if (DB_theads[key].text)
+			data.text = DB_theads[key].text
+			else return
+
+		if (DB_theads[key].subj && DB_theads[key].subj != '') data.subj = DB_theads[key].subj
+
+		data.key = key
+
+		threadsElem.insertBefore($action.thread(data), threadsElem.firstChild)
+		parseReplies({ key: key })
+	})
+
+	/*
+	 * Создаёт на хэдере борды функцию возврата на нулевую из треда
+	 */
 
 	$make.qs('.board header h2 span').onclick = (() => $action.showBoard())
+
+	/*
+	 * Форма создания нового треда
+	 */
 
 	$make.qs('.create-thread form').onsubmit = (e => {
 		e.preventDefault()
@@ -273,6 +376,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	})
 
 	/*
+	 * Форма создания поста в треде
 	 * @TODO Сделать так, чтобы когда отписали в треде, он поднимался наверх (бамп)
 	 * @TODO Сделать скрытие и сажу
 	 */
@@ -302,7 +406,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			postData['reply'] = e.target.querySelector('.reply-to').dataset.replyTo
 		}
 
-		$make.qs('.thread.oneWhichShow .thread__posts').appendChild($action.post(postData), $make.qs('.threads').firstChild)
+		$make.qs('.thread.oneWhichShow .thread__posts').appendChild($action.post(postData))
 
 		if (thisFormParC.contains('isReplyTo')) {
 			thisFormParC.remove('isReplyTo')
