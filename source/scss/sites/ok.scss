@@ -1,0 +1,42 @@
+@import '../inc/vars';
+@import '../inc/every';
+@import '../inc/mixins';
+
+body {
+	background-color: #f8f8f8;
+	text-align: center;
+}
+
+header {
+	@include flexbox(row, center, center, auto);
+	background-color: #fd8002;
+	color: #fff;
+	height: 60px;
+
+	.brand {
+		& > * {
+			display: inline-block;
+			vertical-align: middle;
+		}
+
+		.logo {
+			background-image: url('/assets/img/rok-logo.png');
+			background-size: cover;
+			width: 50px; height: 50px;
+		}
+
+		p {
+			font-size: 30px;
+			font-weight: 600;
+		}
+	}
+}
+
+main {
+	padding: 20px;
+}
+
+footer {
+	margin-top: 10px;
+	font-size: .7em;
+}

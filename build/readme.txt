@@ -16,6 +16,11 @@
 https://github.com/Juribiyan/wakabamarkjs – wakabamark.js
 https://github.com/blueimp/JavaScript-MD5 – md5.js
 https://github.com/tehcojam/kamina-js – kamina.min.js
+https://unsplash.com/collections/139386/cats?photo=ZHWJc57JgUA
+https://unsplash.com/collections/139386/cats?photo=Mfxnsy82Ns4
+https://unsplash.com/collections/139386/cats?photo=VJj2090vRak
+https://unsplash.com/collections/139386/cats?photo=al-4mydM5jc
+https://unsplash.com/collections/139386/cats?photo=7TU4xLjnsf4
 
 Ачики: Будет указанно позднее
 

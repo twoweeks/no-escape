@@ -17,7 +17,7 @@ var sitesList = {
 		title: 'РосГосЗнания',
 		subtitle: 'большая энциклопедия обо всём',
 		iframe: 'wiki/index.html',
-		shot: '',
+		shot: '/assets/img/rgz-logo.png',
 		logo: '/assets/img/rgz-fav.png'
 	},
 	kremlin: {
@@ -37,18 +37,18 @@ var sitesList = {
 		subtitle: 'общение',
 		iframe: 'dvach/index.html',
 		shot: '',
-		logo: ''
+		logo: '/assets/img/dvach-fav.png'
 	},
 	ok: {
 		title: 'РосКлассники',
 		iframe: 'ok/index.html',
-		shot: '',
+		shot: '/assets/img/rok-logo.png',
 		logo: '/assets/img/rok-fav.png'
 	},
 	cats: {
 		title: 'Кошки и котики',
 		iframe: 'cats/index.html',
-		shot: '',
-		logo: ''
+		shot: '/assets/img/cats-logo.png',
+		logo: '/assets/img/cats-fav.png'
 	}
 }

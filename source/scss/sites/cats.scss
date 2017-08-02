@@ -1,0 +1,31 @@
+@import '../inc/vars';
+@import '../inc/every';
+@import '../inc/mixins';
+
+body {
+	background-color: #ffd6a4;
+	font-family: 'Comic Sans MS', cursive, sans-serif;
+	text-align: center;
+	text-shadow: 5px 5px 20px #fff;
+	color: #0056ff;
+}
+
+h1 {
+	font-size: 5em;
+	color: #f00;
+}
+
+main {
+	img {
+		max-width: 100%;
+	}
+
+	p {
+		margin-top: 10px;
+	}
+}
+
+footer {
+	margin-top: 20px;
+	font-size: .5em;
+}

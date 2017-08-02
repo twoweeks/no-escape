@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			siteShot = $create.elem('div', '', 'site-container--shot'),
 			siteName = $create.elem('div', '', 'site-container--name')
 
-		if (sites[site].shot && sites[site].shot != '') { siteShot.style.backgroundImage = `url('/assets/img/site_shots/${sites[site].shot}')` }
+		if (sites[site].shot && sites[site].shot != '') { siteShot.style.backgroundImage = `url('${sites[site].shot}')` }
 
 		siteName.textContent = sites[site].title
 

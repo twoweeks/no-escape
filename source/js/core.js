@@ -22,6 +22,10 @@ var choseSite = (site => {
 
 	$lss.set(lss_key, '1')
 
+	let loadingTitles = ['Загрузка...', 'Прогон через СОРМ...', 'Проверка IP...', 'Поиск записи в реестре...']
+
+	document.title = loadingTitles[random(0, (loadingTitles.length - 1))]
+
 	let
 		currentSite = $lss.get('currentSite'),
 		currentSiteBlock = $make.qs(`.game .game--site#${currentSite}`)
@@ -30,9 +34,17 @@ var choseSite = (site => {
 		currentSiteBlock.classList.remove('active')
 	}
 
-	let loadingTitles = ['Загрузка...', 'Прогон через DPI...', 'Проверка IP...']
+	let
+		panelLi = $make.qs(`.panel li[data-site="${site}"]`),
+		panelLiCurrent = $make.qs(`.panel li[data-site="${currentSite}"]`)
 
-	document.title = loadingTitles[random(0, (loadingTitles.length - 1))]
+	if (currentSite && panelLiCurrent.classList.contains('active')) {
+		panelLiCurrent.classList.remove('active')
+	}
+
+	if (panelLi.classList.contains('hidden')) {
+		panelLi.classList.remove('hidden')
+	}
 
 	if (sitesList[site].logo && sitesList[site].logo != '') {
 		let link = $make.qs('link[rel*="icon"]') || $create.elem('link')
@@ -49,6 +61,7 @@ var choseSite = (site => {
 
 	setTimeout(() => {
 		$make.qs(`.game .game--site#${site}`).classList.add('active')
+		panelLi.classList.add('active')
 		document.title = newTitle
 		$lss.rm(lss_key)
 	//}, random(2000, 5000))

@@ -1,0 +1,19 @@
+doctype html
+html
+	head
+		include ../../inc/_vars.pug
+		include ../../inc/_all.pug
+		
+		link(rel='stylesheet' href=`/assets/css/sites/cats.min.css?v=${project.ver}`)
+	body
+		header
+			h1 Котики и кошки
+		main
+			h2 сегодняшний котик:
+			div.cat
+			p приходите завтра!
+		footer
+			p &copy; РосГосКоннект
+		
+		each JS in ['iframes', 'kamina', 'sites/cats']
+			script(src=`/assets/js/${JS}.min.js?v=${project.ver}` defer)

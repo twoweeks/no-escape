@@ -1,0 +1,20 @@
+doctype html
+html
+	head
+		include ../../inc/_vars.pug
+		include ../../inc/_all.pug
+		
+		link(rel='stylesheet' href=`/assets/css/sites/ok.min.css?v=${project.ver}`)
+	body
+		header
+			div.brand
+				div.logo
+				p РосКлассники
+
+		main
+			p Здравствуйте, пользователь портала #[b РосКлассники]!
+			p В данный момент проходят работы по обновлению цензур-листа.
+			p(style='margin-top: 20px') Зайдите позже, пожалуйста.
+
+		footer
+			p &copy; РосГосКоннект
