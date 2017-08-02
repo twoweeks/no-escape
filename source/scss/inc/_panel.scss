@@ -11,4 +11,14 @@
 			&.active { background-color: rgba(255, 255, 255, 0.6) }
 		}
 	}
+
+	&__anonfm {
+		margin-top: 10px;
+		text-align: center;
+
+		audio {
+			width: calc(100% - 10px);
+			margin-top: 5px;
+		}
+	}
 }

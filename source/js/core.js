@@ -14,6 +14,8 @@ var $lss = {
 	}
 }
 
+var m = 'c'
+
 var random = ((min, max) => Math.floor(Math.random() * (max - min + 1)) + min)
 
 var choseSite = (site => {
@@ -67,3 +69,5 @@ var choseSite = (site => {
 	//}, random(2000, 5000))
 	}, 0)
 })
+
+var a = 'o'

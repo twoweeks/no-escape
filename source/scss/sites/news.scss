@@ -1,0 +1,24 @@
+@import '../inc/vars';
+//@import '../inc/every';
+@import '../inc/mixins';
+
+body {
+	background-color: #fff;
+	text-align: center;
+	margin: 0;
+}
+
+main {
+	article {
+		h4 { margin-bottom: 5px }
+		p { margin-top: 5px }
+	}
+}
+
+footer {
+	margin-top: 10px;
+	font-size: .7em;
+	color: #9f9f9f;
+
+	p { margin: 0 }
+}

@@ -35,7 +35,22 @@ document.addEventListener('DOMContentLoaded', () => {
 		panelSites.appendChild(siteLi)
 	})
 
+	let playerCont = $create.elem('div', '', 'panel__anonfm')
+
 	panel.appendChild(panelSites)
+
+	if (navigator.onLine) {
+		let player = $create.elem('audio', '', 'anon-fm')
+		player.setAttribute('src', 'http://anon.fm:8000/radio')
+		player.setAttribute('controls', '')
+		player.setAttribute('controlsList', 'nodownload')
+		player.setAttribute('preload', 'none')
+		player.setAttribute('volume', '0.5')
+
+		playerCont.appendChild($create.elem('p', 'Радио <q>Мир</q>'))
+		playerCont.appendChild(player)
+		panel.appendChild(playerCont)
+	}
 
 	choseSite('main')
 	let main_sites = $make.qs('.game .main .main--sites .site-container', ['a'])
@@ -43,3 +58,5 @@ document.addEventListener('DOMContentLoaded', () => {
 		site.onclick = (() => choseSite(site.dataset.site))
 	})
 })
+
+var j = 'j'

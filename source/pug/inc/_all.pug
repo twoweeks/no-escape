@@ -3,6 +3,6 @@ meta(name='viewport' content='width=device-width, initial-scale=1.0')
 
 mixin link(href, text, ref)
 	if ref
-		span(data-link=`${href}` data-link-ref=`${(ref) ? '#' + ref : ''}`) #{text}
+		span(data-link=`${href}` data-link-ref=`${(ref) ? ref : ''}`) #{text}
 	else
 		span(data-link=`${href}`) #{text}

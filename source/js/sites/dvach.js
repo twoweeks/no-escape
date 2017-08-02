@@ -185,8 +185,15 @@ var $action = {
 		replyElem.appendChild(replyElemPh)
 		replyElem.appendChild($K.after())
 
-		postElemTop.innerHTML = `${name} <i>${getTime(new Date() / 1000)}</i> №${num} &ndash; ${++postNumITT}`
+		postElemTop.innerHTML = `<span class="nickname">${name}</span> <i>${getTime(new Date() / 1000)}</i> №${num} &ndash; ${++postNumITT}`
 		postElemTop.appendChild(replyElem)
+
+		switch (options['type']) {
+			case 'admin':
+				postElemTop.classList.add('post-type--admin'); break
+			case 'mod':
+				postElemTop.classList.add('post-type--mod'); break
+		}
 
 		if (options['reply'] && options['reply'] != '') {
 			let
@@ -217,6 +224,9 @@ var $action = {
 
 		let postElemContentSpan = $create.elem('span', wm.apply(text))
 		postElemContent.appendChild(postElemContentSpan)
+
+		if (options.stream && options.stream != '') postElem.dataset.stream = options.stream
+		if (options.stream_id && options.stream_id != '') postElem.dataset.streamId = options.stream_id
 
 		postElem.appendChild(postElemTop)
 		postElem.appendChild(postElemContent)
@@ -316,15 +326,23 @@ document.addEventListener('DOMContentLoaded', () => {
 		Object.keys(DB_posts[options.key]).forEach((id, i) => {
 			let
 				data = DB_posts[options.key][id],
-				offset = (options.time && options.time != '') ? 20000 * i + options.k : 10000 * i
+				offset = (options.offset && options.offset != '') ? 1000 * i + Number(`${options.offset}000`) : 1000 * i
 
 			let postData = {
 				num: getThreadNum(options.key),
 				text: data.text,
-				system: id
+				stream: options.key,
+				stream_id: id
 			}
 
+			if (data.name && data.name != '') postData['name'] = data.name
+			if (data.type && data.type != '') postData['type'] = data.type
+
 			setTimeout(() => {
+				if (data.to && data.to != '') {
+					postData['reply'] = $make.qs(`.thread__posts .post[data-stream='${options.key}'][data-stream-id='${data.to}']`).dataset.postNum
+				}
+
 				$make.qs(`.thread#post-${getThreadNum(options.key)} .thread__posts`).appendChild($action.post(postData))
 			}, offset)
 		})
@@ -341,10 +359,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
 		if (DB_theads[key].subj && DB_theads[key].subj != '') data.subj = DB_theads[key].subj
 
+		if (DB_theads[key].name && DB_theads[key].name != '') data['name'] = DB_theads[key].name
+		if (DB_theads[key].type && DB_theads[key].type != '') data['type'] = DB_theads[key].type
+
 		data.key = key
 
 		threadsElem.insertBefore($action.thread(data), threadsElem.firstChild)
-		parseReplies({ key: key })
+		if (DB_posts[key]) parseReplies({ key: key })
 	})
 
 	/*
@@ -418,3 +439,5 @@ document.addEventListener('DOMContentLoaded', () => {
 		e.target.querySelector('*[name="text"]').value = ''
 	})
 })
+
+var c = 'm'

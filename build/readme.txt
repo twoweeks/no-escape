@@ -1,6 +1,14 @@
-Название: No Escape
+﻿Название: No Escape
+
+Специально для TWGX: https://twg-x.blogspot.ru
 
 Описание: Игра про возможное будущее Интернета в одной восточноевропейский стране (информация уточняется, обратитесь позднее).
+
+/*
+ * За две недели не сделано совсем практически вообще ничего.
+ * Считайте это расширенной демкой.
+ * Игра обязательно будет доделана позднее.
+ */
 
 Жанра нет (возможно ZPG).
 
@@ -12,6 +20,8 @@
 
 Также, так как есть проблема с CORS, то нужен простенький HTTP-сервер. Для этого в директории /assets/server/ лежит утилита Mongoose, запуск осуществляется по даблклику на start.bat. Также, если вы не хотите доверяться стороннему софту (а также если у вас не Windows), можно посмотреть этот документ: https://gist.github.com/willurd/5720255. Скорее всего, один из указанных способов должен вам подойти.
 
+Или можно поиграть онлайн здесь: cocoandcupcakesstdio.tk/no-escape/
+
 Сторонний контент:
 https://github.com/Juribiyan/wakabamarkjs – wakabamark.js
 https://github.com/blueimp/JavaScript-MD5 – md5.js
@@ -21,13 +31,12 @@ https://unsplash.com/collections/139386/cats?photo=Mfxnsy82Ns4
 https://unsplash.com/collections/139386/cats?photo=VJj2090vRak
 https://unsplash.com/collections/139386/cats?photo=al-4mydM5jc
 https://unsplash.com/collections/139386/cats?photo=7TU4xLjnsf4
-
-Ачики: Будет указанно позднее
+https://yandex.ru/referats/?t=polit+agrobiologia&s=85159
+http://anon.fm
 
 ОСТОРОЖНО: Сюжет будет сорт оф политота.
 
 /////
 // Copyright: //
 // Cocoa & Cupcakes Studio / cocoandcupcakesstdio.tk //
-// Coffee Jam Party / cojam.ru //
 /////
