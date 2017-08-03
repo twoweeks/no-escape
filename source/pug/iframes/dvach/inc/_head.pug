@@ -4,4 +4,4 @@ include ../../../inc/_all.pug
 mixin link2(action, text)
 	span(data-link-action=`${action}`) #{text}
 
-link(rel='stylesheet' href=`/assets/css/sites/dvach.min.css?v=${project.ver}`)
+link(rel='stylesheet' href=`${paths.assets}/css/sites/dvach.min.css?v=${project.ver}`)

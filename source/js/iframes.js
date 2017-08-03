@@ -21,5 +21,3 @@ document.addEventListener('DOMContentLoaded', () => {
 		})
 	}
 })
-
-var o = 'a'

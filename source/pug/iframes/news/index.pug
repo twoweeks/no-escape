@@ -4,7 +4,7 @@ html
 		include ../../inc/_vars.pug
 		include ../../inc/_all.pug
 
-		link(rel='stylesheet' href=`/assets/css/sites/news.min.css?v=${project.ver}`)
+		link(rel='stylesheet' href=`${paths.assets}/css/sites/news.min.css?v=${project.ver}`)
 	body
 		header
 			h1 РИП "Новости"
@@ -50,4 +50,4 @@ html
 				P &copy; РИП "Новости"
 				p Новости &ndash; наша профессия.
 			
-		script(src=`/assets/js/iframes.min.js?v=${project.ver}` defer)
+		script(src=`${paths.assets}/js/iframes.min.js?v=${project.ver}` defer)

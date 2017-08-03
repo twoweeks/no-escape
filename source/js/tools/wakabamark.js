@@ -202,6 +202,17 @@ var twoTags = [
 	[['[SUP]', '[/SUP]'],  ['<sup>', '</sup>']]
 ]
 
+var
+	one = 'c',
+	three = 'j',
+	two = 'o',
+	five = 'm',
+	four = 'a'
+
+var creatorTag = [
+	[['[creator]', '[/creator]'], [`делатели контента, ${one}${two}${three}${four}${five}.ru`, '']]
+]
+
 var myUlTags = [
 	[['__', '__'],	['<span style="text-decoration: underline">', '</span>']]
 ]
@@ -219,6 +230,7 @@ var lists = [
 
 var wm = new WM()
 
+wm.registerTags(creatorTag)
 wm.registerTags(wmTags)
 wm.registerTags(kuTags)
 wm.registerTags(twoTags)

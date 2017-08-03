@@ -1,4 +1,2 @@
-footer
-
-each JS in ['iframes', 'kamina', 'sites/dvach']
-	script(src=`/assets/js/${JS}.min.js?v=${project.ver}` defer)
+each JS in ['iframes', 'kamina', 'tools/wakabamark', 'tools/md5', 'story-db', 'sites/dvach']
+	script(src=`${paths.assets}/js/${JS}.min.js?v=${project.ver}` defer)

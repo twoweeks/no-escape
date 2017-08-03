@@ -326,7 +326,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		Object.keys(DB_posts[options.key]).forEach((id, i) => {
 			let
 				data = DB_posts[options.key][id],
-				offset = (options.offset && options.offset != '') ? 1000 * i + Number(`${options.offset}000`) : 1000 * i
+				offset = (options.offset && options.offset != '') ? 30000 * i + Number(`${options.offset}000`) : 30000 * i
 
 			let postData = {
 				num: getThreadNum(options.key),
@@ -439,5 +439,3 @@ document.addEventListener('DOMContentLoaded', () => {
 		e.target.querySelector('*[name="text"]').value = ''
 	})
 })
-
-var c = 'm'

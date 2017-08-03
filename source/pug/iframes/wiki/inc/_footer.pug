@@ -3,4 +3,4 @@ footer
 	p.copy &copy; #[+link('index', 'РосГосЗнания')]
 
 each JS in ['iframes', 'sites/wiki']
-	script(src=`/assets/js/${JS}.min.js?v=${project.ver}` defer)
+	script(src=`${paths.assets}/js/${JS}.min.js?v=${project.ver}` defer)

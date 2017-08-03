@@ -1,6 +1,8 @@
 'use strict'
 
 document.addEventListener('DOMContentLoaded', () => {
+	sessionStorage.clear()
+
 	let
 		game = $make.qs('.game'),
 		sites = sitesList
@@ -9,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		let whatToEmbed = ''
 		if (sites[site].iframe && sites[site].iframe != '') {
 			whatToEmbed = $create.elem('iframe')
-			whatToEmbed.setAttribute('src', `/iframes/${sites[site].iframe}`)
+			whatToEmbed.setAttribute('src', `iframes/${sites[site].iframe}`)
 		} else {
 			whatToEmbed = sitesContent[site]().cloneNode('true')
 		}
@@ -52,11 +54,9 @@ document.addEventListener('DOMContentLoaded', () => {
 		panel.appendChild(playerCont)
 	}
 
-	choseSite('main')
+	choseSite('board')
 	let main_sites = $make.qs('.game .main .main--sites .site-container', ['a'])
 	Array.from(main_sites).forEach(site => {
 		site.onclick = (() => choseSite(site.dataset.site))
 	})
 })
-
-var j = 'j'

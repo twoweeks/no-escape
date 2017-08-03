@@ -18,5 +18,5 @@ html
 			p РосГосКоннект &ndash; государственный провайдер.
 			p Лучший, потому что единственный.
 		
-		each JS in ['kamina', 'sites/main']
-			script(src=`/assets/js/${JS}.min.js?v=${project.ver}`)
+		each JS in ['kamina', 'iframes', 'sites/main']
+			script(src=`${paths.assets}/js/${JS}.min.js?v=${project.ver}`)
