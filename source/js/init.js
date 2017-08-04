@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		panel.appendChild(playerCont)
 	}
 
-	choseSite('board')
+	choseSite('main')
 	let main_sites = $make.qs('.game .main .main--sites .site-container', ['a'])
 	Array.from(main_sites).forEach(site => {
 		site.onclick = (() => choseSite(site.dataset.site))
