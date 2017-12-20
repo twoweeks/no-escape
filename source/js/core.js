@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var $lss = {
 	get: (item) => sessionStorage.getItem(item),
@@ -14,11 +14,11 @@ var $lss = {
 	}
 }
 
-var random = ((min, max) => Math.floor(Math.random() * (max - min + 1)) + min)
+var random = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min
 
-var choseSite = (site => {
+var choseSite = site => {
 	let lss_key = 'choseSiteBtnIsClicked'
-	if ($lss.get(lss_key) == '1') return;
+	if ($lss.get(lss_key) == '1') { return }
 
 	$lss.set(lss_key, '1')
 
@@ -66,4 +66,4 @@ var choseSite = (site => {
 		$lss.rm(lss_key)
 	}, random(2000, 5000))
 	//}, 0)
-})
+}

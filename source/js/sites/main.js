@@ -13,11 +13,13 @@ document.addEventListener('DOMContentLoaded', () => {
 			siteShot = $create.elem('div', '', 'site-container--shot'),
 			siteName = $create.elem('div', '', 'site-container--name')
 
-		if (sites[site].shot && sites[site].shot != '') { siteShot.style.backgroundImage = `url('${sites[site].shot}')` }
+		if (sites[site].shot && sites[site].shot != '') {
+			siteShot.style.backgroundImage = `url('${sites[site].shot}')`
+		}
 
 		siteName.textContent = sites[site].title
 
-		siteC.onclick = (() => { parent.window.choseSite(site) })
+		siteC.onclick = () => parent.window.choseSite(site)
 
 		siteC.appendChild(siteShot)
 		siteC.appendChild(siteName)

@@ -6,12 +6,11 @@ html
 		meta(chatset='UTF-8')
 		title Загрузка игры...
 
-		each CSS in ['root']
-			link(rel='stylesheet' href=`/assets/css/${CSS}.min.css?v=${project.ver}`)
+		link(rel='stylesheet' href=`/assets/css/root.min.css?v=${VERSION}`)
 	body
 		aside.panel
 
 		div.game
 
 		each JS in ['kamina', 'core', 'sites', 'tools/preventReload', 'init']
-			script(src=`${paths.assets}/js/${JS}.min.js?v=${project.ver}` defer)
+			script(src=`${paths.assets}/js/${JS}.min.js?v=${VERSION}` defer)

@@ -16,7 +16,7 @@ body {
 
 .game {
 	min-width: 400px;
-	background-image: url('../img/loading.png');
+	background-image: url('../img/loading.png?v=#{$VERSION}');
 	background-repeat: no-repeat;
 	background-position: center center;
 	background-color: #f2f2f2;

@@ -15,7 +15,7 @@ var $K = {
  * Вставка строки с временем публикации поста
  */
 
-var getTime = (timestamp => {
+var getTime = timestamp => {
 	let
 		a =     new Date(timestamp * 1000),
 		days =  ['Вск', 'Пнд', 'Втр', 'Срд', 'Чтв', 'Птн', 'Суб']
@@ -29,7 +29,7 @@ var getTime = (timestamp => {
 		sec =    (a.getSeconds() >= 10) ? a.getSeconds() : `0${a.getSeconds()}`
 
 	return `${date}/${month}/${year} ${days[a.getDay()]} ${hour}:${min}:${sec}`
-})
+}
 
 /*
  * Вставка поста в тред
@@ -43,8 +43,8 @@ var appendPost = () => {
  * Сохранение в сессионном хранилище ключа (айдишника) треда
  */
 
-var setThreadKey = ((key, number) => {
-	if (!key && !number) return
+var setThreadKey = (key, number) => {
+	if (!key && !number) { return }
 
 	let allData = {}, lssName = 'threads'
 
@@ -52,15 +52,15 @@ var setThreadKey = ((key, number) => {
 
 	allData[key] = number
 	$pK.lss.set(lssName, JSON.stringify(allData))
-})
+}
 
-var getThreadNum = (key => {
-	if (!key) return
+var getThreadNum = key => {
+	if (!key) { return }
 
 	let allData = JSON.parse($pK.lss.get('threads'))
 
 	return allData[key]
-})
+}
 
 /*
  * .thread() - создание треда
@@ -71,9 +71,9 @@ var getThreadNum = (key => {
  */
 
 var $action = {
-	thread: (options => {
-		if (!options) options = {}
-		if (Object.keys(options).length == 0) return
+	thread: options => {
+		if (!options) { options = {} }
+		if (Object.keys(options).length == 0) { return }
 
 		let
 			text =     options['text'],
@@ -108,18 +108,19 @@ var $action = {
 		threadElem.dataset.threadNum = num
 		threadElem.dataset.threadPosts = 1
 		threadElemTopShow.dataset.linkAction = ''
-		threadElemTopShow.onclick = (() => {
+
+		threadElemTopShow.onclick = () => {
 			$action.showThread(threadElem.dataset.threadNum)
-		})
+		}
 
 		let
 			replyElem = $create.elem('span', '', 'thread__top--reply'),
 			replyElemPh = $create.elem('span', 'Ответить')
 
 		replyElemPh.dataset.linkAction = ''
-		replyElemPh.onclick = ((e) => {
+		replyElemPh.onclick = e => {
 			$action.reply(threadElem.dataset.threadNum)
-		})
+		}
 
 		replyElem.innerHTML = ' ['
 		replyElem.appendChild(replyElemPh)
@@ -137,21 +138,25 @@ var $action = {
 		threadElem.appendChild(threadElemRefs)
 		threadElem.appendChild(threadElemPosts)
 
-		if (options['key'] && options['key'] != '') { setThreadKey(options['key'], num) }
+		if (options['key'] && options['key'] != '') {
+			setThreadKey(options['key'], num)
+		}
 
 		$pK.lss.set('counter', ++num)
 
 		$make.qs('.board .create-thread details').open = false
 
 		return threadElem
-	}),
-	post: (options => {
-		if (!options) options = {}
-		if (Object.keys(options).length == 0) return
+	},
+	post: options => {
+		if (!options) { options = {} }
+		if (Object.keys(options).length == 0) { return }
 
 		let
 			text = options['text'],
-			name = (options['name'] && options['name'] != '') ? options['name'] : 'Аноним'
+			name = (options['name'] && options['name'] != '')
+				? options['name']
+				: 'Аноним'
 
 		if (!$pK.lss.get('counter')) { $pK.lss.set('counter', '0') }
 		let num = Number($pK.lss.get('counter'))
@@ -172,14 +177,16 @@ var $action = {
 		postElem.id = `post-${num}`
 		postElem.dataset.postNum = num
 
+		postElem.dataset.threadNum = $make.qs(`.thread[data-thread-num="${options['num']}"]`).dataset.threadNum
+
 		let
 			replyElem = $create.elem('span', '', 'thread__top--reply'),
 			replyElemPh = $create.elem('span', 'Ответить')
 
 		replyElemPh.dataset.linkAction = ''
-		replyElemPh.onclick = ((e) => {
+		replyElemPh.onclick = e => {
 			$action.reply(postElem.dataset.postNum)
-		})
+		}
 
 		replyElem.innerHTML = ' ['
 		replyElem.appendChild(replyElemPh)
@@ -207,13 +214,20 @@ var $action = {
 			postWhichReplied.dataset.linkAction = ''
 			postWhichReplied.dataset.linkTo = num
 
-			postWhichReplied.onclick = (e => {
-				if (document.body.dataset.show = 'thread') $make.qs(`#post-${e.target.dataset.linkTo}`).scrollIntoView(true)
-			})
+			postWhichReplied.onclick = e => {
+				if (document.body.dataset.show == 'thread') {
+					$make.qs(`#post-${e.target.dataset.linkTo}`).scrollIntoView(true)
+				}
+			}
 
-			postReplyLink.onclick = (e => {
-				if (document.body.dataset.show = 'thread') $make.qs(`#post-${e.target.dataset.linkReplyTo}`).scrollIntoView(true)
-			})
+			postReplyLink.onclick = e => {
+				switch (document.body.dataset.show) {
+					case 'board':
+						$action.showThread(postElem.dataset.threadNum)
+					default:
+						$make.qs(`#post-${e.target.dataset.linkReplyTo}`).scrollIntoView(true)
+				}
+			}
 
 			postElemContent.appendChild(postReplyLink)
 			postElemContent.appendChild($K.br())
@@ -236,8 +250,8 @@ var $action = {
 		$make.qs(`.thread[data-thread-num="${options['num']}"]`).dataset.threadPosts = postNumITT
 
 		return postElem
-	}),
-	showThread: (num => {
+	},
+	showThread: num => {
 		let
 			body = document.body,
 			replyFormC = $make.qs('.reply')
@@ -258,17 +272,17 @@ var $action = {
 			$make.qs(`.thread[data-thread-num="${num}"]`).classList.add('oneWhichShow')
 			$make.qs('.board .create-thread details').open = false
 		}
-	}),
-	showBoard: (() => {
+	},
+	showBoard: () => {
 		let body = document.body
 
-		if (!body.dataset.threadNum || body.dataset.threadNum == '' || body.dataset.show == 'board') return;
+		if (!body.dataset.threadNum || body.dataset.threadNum == '' || body.dataset.show == 'board') { return }
 
 		delete body.dataset.threadNum
 		body.dataset.show = 'board'
 		$make.qs('.thread.oneWhichShow').classList.remove('oneWhichShow')
-	}),
-	reply: (num => {
+	},
+	reply: num => {
 		let
 			replyForm = $make.qs('.reply'),
 			replyFromDe = replyForm.querySelector('details'),
@@ -279,7 +293,7 @@ var $action = {
 		replyForm.classList.add('isReplyTo')
 		replyFromDe.open = true
 		replyFromDeNum.dataset.replyTo = num
-	})
+	}
 }
 
 /*
@@ -288,7 +302,7 @@ var $action = {
 
 document.addEventListener('DOMContentLoaded', () => {
 	/*
-	 * Добавление событий на кнопки-действик
+	 * Добавление событий на кнопки-действия
 	 */
 
 	let
@@ -297,7 +311,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	if (actionBtns) {
 		Array.from(actionBtns).forEach(btn => {
-			btn.onclick = ((e) => {
+			btn.onclick = e => {
 				switch (btn.dataset.linkAction) {
 					case 'showB':
 						bodyData.show = 'board'; break
@@ -307,7 +321,7 @@ document.addEventListener('DOMContentLoaded', () => {
 					default:
 						return;
 				}
-			})
+			}
 		})
 	}
 
@@ -319,14 +333,16 @@ document.addEventListener('DOMContentLoaded', () => {
 		DB_theads =  DB['threads'],
 		DB_posts =   DB['posts']
 
-	var parseReplies = (options => {
-		if (!options) options = {}
-		if (Object.keys(options).length == 0) return
+	var parseReplies = options => {
+		if (!options) { options = {} }
+		if (Object.keys(options).length == 0) { return }
 
 		Object.keys(DB_posts[options.key]).forEach((id, i) => {
 			let
 				data = DB_posts[options.key][id],
-				offset = (options.offset && options.offset != '') ? 30000 * i + Number(`${options.offset}000`) : 30000 * i
+				offset = (options.offset && options.offset != '')
+					? 3000 * i + Number(`${options.offset}000`)
+					: 3000 * i
 
 			let postData = {
 				num: getThreadNum(options.key),
@@ -346,39 +362,41 @@ document.addEventListener('DOMContentLoaded', () => {
 				$make.qs(`.thread#post-${getThreadNum(options.key)} .thread__posts`).appendChild($action.post(postData))
 			}, offset)
 		})
-	})
+	}
 
 	Object.keys(DB_theads).forEach(key => {
 		let
 			data = {},
 			threadsElem = $make.qs('.threads')
 
-		if (DB_theads[key].text)
+		if (DB_theads[key].text) {
 			data.text = DB_theads[key].text
-			else return
+		} else { return }
 
-		if (DB_theads[key].subj && DB_theads[key].subj != '') data.subj = DB_theads[key].subj
+		if (DB_theads[key].subj && DB_theads[key].subj != '') {
+			data.subj = DB_theads[key].subj
+		}
 
-		if (DB_theads[key].name && DB_theads[key].name != '') data['name'] = DB_theads[key].name
-		if (DB_theads[key].type && DB_theads[key].type != '') data['type'] = DB_theads[key].type
+		if (DB_theads[key].name && DB_theads[key].name != '') { data['name'] = DB_theads[key].name }
+		if (DB_theads[key].type && DB_theads[key].type != '') { data['type'] = DB_theads[key].type }
 
 		data.key = key
 
 		threadsElem.insertBefore($action.thread(data), threadsElem.firstChild)
-		if (DB_posts[key]) parseReplies({ key: key })
+		if (DB_posts[key]) { parseReplies({ key: key }) }
 	})
 
 	/*
 	 * Создаёт на хэдере борды функцию возврата на нулевую из треда
 	 */
 
-	$make.qs('.board header h2 span').onclick = (() => $action.showBoard())
+	$make.qs('.board header h2 span').onclick = () => $action.showBoard()
 
 	/*
 	 * Форма создания нового треда
 	 */
 
-	$make.qs('.create-thread form').onsubmit = (e => {
+	$make.qs('.create-thread form').onsubmit = e => {
 		e.preventDefault()
 		let
 			data = new FormData(e.target),
@@ -394,7 +412,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 		e.target.querySelector('*[name="subj"]').value = ''
 		e.target.querySelector('*[name="text"]').value = ''
-	})
+	}
 
 	/*
 	 * Форма создания поста в треде
@@ -402,14 +420,14 @@ document.addEventListener('DOMContentLoaded', () => {
 	 * @TODO Сделать скрытие и сажу
 	 */
 
-	$make.qs('.reply form').onsubmit = (e => {
+	$make.qs('.reply form').onsubmit = e => {
 		e.preventDefault()
 
 		let
 			body = document.body,
 			thisFormParC = $make.qs('.reply').classList
 
-		if (!body.dataset.threadNum || body.dataset.threadNum == '') return;
+		if (!body.dataset.threadNum || body.dataset.threadNum == '') { return }
 
 		let
 			data = new FormData(e.target),
@@ -437,5 +455,5 @@ document.addEventListener('DOMContentLoaded', () => {
 		$make.qs('.reply').scrollIntoView(false)
 
 		e.target.querySelector('*[name="text"]').value = ''
-	})
+	}
 })

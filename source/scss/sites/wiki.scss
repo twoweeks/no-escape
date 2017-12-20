@@ -49,7 +49,7 @@ header {
 
 	.logo {
 		width: 180px; height: 165px;
-		background-image: url('../../img/rgz-logo.png');
+		background-image: url('../../img/rgz-logo.png?v=#{$VERSION}');
 		background-position: center center;
 		background-repeat: no-repeat;
 		background-size: contain;

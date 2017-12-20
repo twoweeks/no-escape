@@ -30,10 +30,10 @@ document.addEventListener('DOMContentLoaded', () => {
 		if (sites[site].hidden) { return }
 		let siteLi = $create.elem('li', sites[site].title)
 
-		if (site != 'main') siteLi.classList.add('hidden')
+		if (site != 'main') { siteLi.classList.add('hidden') }
 
 		siteLi.dataset.site = site
-		siteLi.onclick = (() => choseSite(site))
+		siteLi.onclick = () => choseSite(site)
 		panelSites.appendChild(siteLi)
 	})
 
@@ -57,6 +57,6 @@ document.addEventListener('DOMContentLoaded', () => {
 	choseSite('main')
 	let main_sites = $make.qs('.game .main .main--sites .site-container', ['a'])
 	Array.from(main_sites).forEach(site => {
-		site.onclick = (() => choseSite(site.dataset.site))
+		site.onclick = () => choseSite(site.dataset.site)
 	})
 })
