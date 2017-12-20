@@ -4,7 +4,7 @@
   "private": true,
   "version": "0.1.0",
   "author": "Cojam",
-  "repository": "bitbucket:ruLait/no-escape",
+  "repository": "github:twoweeks/no-escape",
   "license": "MIT",
   "dependencies": {
     "kamina-js": "1.2.3"
